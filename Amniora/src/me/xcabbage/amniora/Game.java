@@ -12,11 +12,13 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.materials.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.materials.Material;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.Environment;
 
@@ -29,6 +31,7 @@ public class Game implements ApplicationListener {
 	private ModelInstance instance;
 	private ModelBatch modelBatch;
 	private Environment environment;
+	public CameraInputController camController;
 
 	@Override
 	public void create() {
@@ -37,6 +40,7 @@ public class Game implements ApplicationListener {
 		float h = Gdx.graphics.getHeight();
 
 		// Camera init
+		// object
 		camera = new PerspectiveCamera(67, w, h);
 		camera.position.set(10f, 10f, 10f);
 		camera.lookAt(0, 0, 0);
@@ -44,10 +48,15 @@ public class Game implements ApplicationListener {
 		camera.far = 300f;
 		camera.update();
 
+		// controls
+		camController = new CameraInputController(camera);
+		Gdx.input.setInputProcessor(camController);
+
 		// Lighting init
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f,
 				0.4f, 0.4f, 1f));
+
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f,
 				-0.8f, -0.2f));
 		// Model init
@@ -85,16 +94,16 @@ public class Game implements ApplicationListener {
 
 		// batch.setProjectionMatrix(camera.combined);
 		// batch.begin();
-		// // DRAWING BELOW
-		//
+		// DRAWING BELOW
+
 		// sprite.draw(batch);
-		//
+
 		// // DRAWING UP
 		// batch.end();
 		modelBatch.begin(camera);
-		modelBatch.render(instance);
+		modelBatch.render(instance, environment);
 		modelBatch.end();
-		System.out.println("rendering");
+		camController.update();
 
 	}
 
