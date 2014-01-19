@@ -42,6 +42,7 @@ public class Game implements ApplicationListener {
 	public Array<ModelInstance> instances = new Array<ModelInstance>();
 	public boolean loading;
 	public Mesh mesh;
+	public ModelInstance moving;
 
 	@Override
 	public void create() {
@@ -99,11 +100,40 @@ public class Game implements ApplicationListener {
 
 	public void doneLoading() {
 
+		// PLANET
 		Model planet = assets.get("data/planet_colors.g3db", Model.class);
 		ModelInstance planetInstance = new ModelInstance(planet);
 		Material mat = planetInstance.materials.get(0);
 		mat.set(new TextureAttribute(TextureAttribute.Diffuse, texture));
+
+		moving = planetInstance;
 		instances.add(planetInstance);
+
+		// SPHERES AROUND
+		Color color = Color.WHITE;
+
+		for (int a = 0; a < 4; a++) {
+			ModelInstance ball = new ModelInstance(planet, 0, -15, -1
+					* (a * 10 + 10));
+			switch (a) {
+			case 0:
+				color = Color.GREEN;
+				break;
+			case 1:
+				color = Color.YELLOW;
+				break;
+			case 2:
+				color = Color.BLUE;
+				break;
+			case 3:
+				color = Color.RED;
+				break;
+
+			}
+			ball.materials.get(0).set(
+					new Material(ColorAttribute.createDiffuse(color)));
+			instances.add(ball);
+		}
 
 		loading = false;
 	}
@@ -137,7 +167,20 @@ public class Game implements ApplicationListener {
 		texture.bind();
 		modelBatch.begin(camera);
 		modelBatch.render(instances, environment);
+
 		modelBatch.end();
+		updateGame();
+
+	}
+
+	void updateGame() {
+		try {
+			moving.transform.translate(0, 0, -0.05f);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// for(int x = 1;x<4;x++)
+		// instances.get(x).transform.translate(0,0,1);
 
 	}
 
