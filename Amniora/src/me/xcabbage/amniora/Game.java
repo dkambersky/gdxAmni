@@ -20,6 +20,7 @@ import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
@@ -76,7 +77,7 @@ public class Game implements ApplicationListener {
 
 		assets = new AssetManager();
 		assets.load("data/ship.g3db", Model.class);
-		assets.load("data/planet_color.g3db", Model.class);
+		assets.load("data/planet_colors.g3db", Model.class);
 
 		// Old || unused methods
 		batch = new SpriteBatch();
@@ -91,14 +92,18 @@ public class Game implements ApplicationListener {
 		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
 		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
 		sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
+
 		loading = true;
 
 	}
 
 	public void doneLoading() {
 
-		Model planet = assets.get("data/planet_color.g3db", Model.class);
-		instances.add(new ModelInstance(planet));
+		Model planet = assets.get("data/planet_colors.g3db", Model.class);
+		ModelInstance planetInstance = new ModelInstance(planet);
+		Material mat = planetInstance.materials.get(0);
+		mat.set(new TextureAttribute(TextureAttribute.Diffuse, texture));
+		instances.add(planetInstance);
 
 		loading = false;
 	}
