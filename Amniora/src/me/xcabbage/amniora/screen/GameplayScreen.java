@@ -1,13 +1,13 @@
-package me.xcabbage.amniora;
+package me.xcabbage.amniora.screen;
 
-import com.badlogic.gdx.ApplicationListener;
+import me.xcabbage.amniora.GameAmn;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.ModelLoader;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -15,20 +15,22 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
+import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.loader.ObjLoader;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.graphics.g3d.Environment;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
 
-public class Game implements ApplicationListener {
+public class GameplayScreen implements Screen {
+	private GameAmn game;
 	private PerspectiveCamera camera;
 	private SpriteBatch batch;
 	private Texture texture;
@@ -44,8 +46,8 @@ public class Game implements ApplicationListener {
 	public Mesh mesh;
 	public ModelInstance moving;
 
-	@Override
-	public void create() {
+	public GameplayScreen(final GameAmn gam) {
+		game = gam;
 		Gdx.gl.glEnable(GL10.GL_TEXTURE_2D);
 
 		modelBatch = new ModelBatch();
@@ -139,14 +141,7 @@ public class Game implements ApplicationListener {
 	}
 
 	@Override
-	public void dispose() {
-		batch.dispose();
-		texture.dispose();
-
-	}
-
-	@Override
-	public void render() {
+	public void render(float delta) {
 		if (loading && assets.update())
 			doneLoading();
 
@@ -169,30 +164,55 @@ public class Game implements ApplicationListener {
 		modelBatch.render(instances, environment);
 
 		modelBatch.end();
-		updateGame();
+//		 updateGame();
 
 	}
 
-	void updateGame() {
+	public void updateGame() {
 		try {
-			moving.transform.translate(0, 0, -0.05f);
+			moving.transform.translate(wrapPoint());
+
 		} catch (Exception e) {
-			e.printStackTrace();
+
 		}
 		// for(int x = 1;x<4;x++)
 		// instances.get(x).transform.translate(0,0,1);
 
 	}
 
+	Vector3 wrapPoint() {
+		return new Vector3(0, 0, -0.04f);
+	}
+
 	@Override
 	public void resize(int width, int height) {
+
+	}
+
+	@Override
+	public void show() {
+
+	}
+
+	@Override
+	public void hide() {
+
 	}
 
 	@Override
 	public void pause() {
+
 	}
 
 	@Override
 	public void resume() {
+
 	}
+
+	@Override
+	public void dispose() {
+		batch.dispose();
+		texture.dispose();
+	}
+
 }

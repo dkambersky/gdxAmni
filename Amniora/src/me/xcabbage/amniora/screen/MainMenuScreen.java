@@ -8,22 +8,29 @@
 
 package me.xcabbage.amniora.screen;
 
-import me.xcabbage.amniora.Game;
+import java.awt.Font;
+
+import me.xcabbage.amniora.GameAmn;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.materials.ColorAttribute;
-import com.badlogic.gdx.graphics.g3d.materials.Material;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 
 /**
@@ -31,43 +38,51 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
  * 
  */
 public class MainMenuScreen implements Screen {
-	private Game game;
-	private PerspectiveCamera camera;
+	private OrthographicCamera camera;
 	private SpriteBatch batch;
 	private Texture texture;
 	private Sprite sprite;
-	private Model model;
-	private ModelInstance instance;
-	private ModelBatch modelBatch;
+	BitmapFont font;
+	GameAmn game;
 
-	public MainMenuScreen(final Game gam) {
+	public MainMenuScreen(final GameAmn gam) {
 		game = gam;
+
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
-		camera = new PerspectiveCamera();
-		camera = new PerspectiveCamera(67, w, h);
-		camera.position.set(10f, 10f, 10f);
-		camera.lookAt(0, 0, 0);
-		camera.near = 0.1f;
-		camera.far = 300f;
-		camera.update();
-		ModelBuilder modelBuilder = new ModelBuilder();
-		model = modelBuilder.createSphere(2f, 2f, 2f, 20, 20, new Material(),
-				Usage.Position | Usage.Normal | Usage.TextureCoordinates);
 
-		instance = new ModelInstance(model);
+		font = new BitmapFont();
+		batch = new SpriteBatch();
+		camera = new OrthographicCamera();
+
+		camera.setToOrtho(false, w, h);
+		camera.update();
+		texture = new Texture(Gdx.files.internal("menuSmaller.png"));
+		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		sprite = new Sprite(texture);
+		sprite.setScale(.5f);
+		sprite.setOrigin(0, 0);
+		sprite.setPosition(0, -330);
 
 	}
 
 	@Override
 	public void render(float delta) {
-		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(),
-				Gdx.graphics.getHeight());
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
-		modelBatch.begin(camera);
-		modelBatch.render(instance);
-		modelBatch.end();
+
+		batch.setProjectionMatrix(camera.combined);
+		batch.begin();
+
+		sprite.draw(batch);
+		font.draw(batch, "sup", 150, 50);
+
+		batch.end();
+
+		if (Gdx.input.isKeyPressed(Keys.LEFT))
+			game.setScreen(new GameplayScreen(game));
+		dispose();
 
 	}
 
@@ -98,6 +113,9 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
+		texture.dispose();
+		batch.dispose();
+		font.dispose();
 
 	}
 

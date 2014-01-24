@@ -8,9 +8,9 @@ public class Main {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Amniora";
 		cfg.useGL20 = false;
-		cfg.width = 720;
-		cfg.height = 640;
-		
-		new LwjglApplication(new Game(), cfg);
+		cfg.width = 1024;
+		cfg.height = 690;
+
+		new LwjglApplication(new GameAmn(), cfg);
 	}
 }
