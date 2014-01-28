@@ -1,8 +1,11 @@
 package me.xcabbage.amniora;
 
+import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.screen.*;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 
 public class GameAmn extends Game {
 
@@ -11,6 +14,15 @@ public class GameAmn extends Game {
 
 	@Override
 	public void create() {
+
+		// Input processing
+
+		InputMultiplexer multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(new AmniInputProcessor(this));
+
+		Gdx.input.setInputProcessor(multiplexer);
+
+		// Screen creation
 		mainMenuScreen = new MainMenuScreen(this);
 		gameplayScreen = new GameplayScreen(this);
 		setScreen(mainMenuScreen);
