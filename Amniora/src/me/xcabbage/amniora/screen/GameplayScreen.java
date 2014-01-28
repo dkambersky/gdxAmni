@@ -65,7 +65,6 @@ public class GameplayScreen implements Screen {
 
 		// controls
 		camController = new CameraInputController(camera);
-		Gdx.input.setInputProcessor(camController);
 
 		// Lighting init
 		environment = new Environment();
@@ -164,7 +163,7 @@ public class GameplayScreen implements Screen {
 		modelBatch.render(instances, environment);
 
 		modelBatch.end();
-//		 updateGame();
+		// updateGame();
 
 	}
 
@@ -191,7 +190,7 @@ public class GameplayScreen implements Screen {
 
 	@Override
 	public void show() {
-
+		Gdx.input.setInputProcessor(camController);
 	}
 
 	@Override
