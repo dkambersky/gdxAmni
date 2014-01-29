@@ -37,8 +37,49 @@ public class AmniInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
+		switch (character) {
+		case 'w':
+			scrolled(-1);
+			break;
+		case 's':
+			scrolled(1);
+			break;
+		case ' ':
+			buttonClicked(activeScreen.activeButton);
+			break;
+		}
+
 		return false;
+	}
+
+	public void buttonClicked(int button) {
+		switch (button) {
+		case 0:
+			System.out.println("Initializing Play");
+
+			game.setScreen(new GameplayScreen(game));
+			game.currentScreen = 1;
+			game.mainMenuScreen.dispose();
+
+			break;
+
+		case 1:
+			System.out.println("Opening stats");
+			break;
+		case 2:
+			System.out.println("Initializing Play");
+			break;
+		case 3:
+			System.out.println();
+			System.out.println("Shutting down.");
+			Gdx.app.exit();
+			break;
+		default:
+			System.out.println("Unknown button pressed. Wth.");
+
+		}
+		activeScreen.activeButton = button;
+
 	}
 
 	@Override
@@ -47,33 +88,7 @@ public class AmniInputProcessor implements InputProcessor {
 		if (game.currentScreen == 0) {
 			for (int a = 0; a < 4; a++) {
 				if (hoveringOverButton(a, screenX, screenY)) {
-
-					switch (a) {
-					case 0:
-						System.out.println("Initializing Play");
-
-						game.setScreen(new GameplayScreen(game));
-						game.currentScreen = 1;
-						game.mainMenuScreen.dispose();
-
-						break;
-
-					case 1:
-						System.out.println("Opening stats");
-						break;
-					case 2:
-						System.out.println("Initializing Play");
-						break;
-					case 3:
-						System.out.println();
-						System.out.println("Shutting down.");
-						Gdx.app.exit();
-						break;
-					default:
-						System.out.println("Unknown button pressed. Wth.");
-
-					}
-					return true;
+					buttonClicked(a);
 				}
 			}
 			System.out.println("No button was pressed.");

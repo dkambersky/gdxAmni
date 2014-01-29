@@ -116,6 +116,13 @@ public class MainMenuScreen implements Screen {
 				"X: " + Gdx.input.getX() + ", Y: " + (Gdx.input.getY()) + ".",
 				5, 20);
 
+
+		F_buttons.draw(batch, "Play", 124, 396);
+		F_buttons.draw(batch, "Stats", 162, 310);
+		F_buttons.draw(batch, "Settings", 238, 240);
+		F_buttons.draw(batch, "Exit", 376, 166);
+
+
 		F_buttonsOutline3.setColor(1, 1, 1, buttonHighlight[0]);
 		F_buttonsOutline3.draw(batch, "Play", 124, 397);
 		F_buttonsOutline1.setColor(1, 1, 1, buttonHighlight[1]);
@@ -124,12 +131,9 @@ public class MainMenuScreen implements Screen {
 		F_buttonsOutline2.draw(batch, "Settings", 238, 240);
 		F_buttonsOutline0.setColor(1, 1, 1, buttonHighlight[3]);
 		F_buttonsOutline0.draw(batch, "Exit", 376, 166);
-
-		F_buttons.draw(batch, "Play", 124, 396);
-		F_buttons.draw(batch, "Stats", 162, 310);
-		F_buttons.draw(batch, "Settings", 238, 240);
-		F_buttons.draw(batch, "Exit", 376, 166);
-
+		
+		
+		
 		// Button highlight handling
 
 		game.standardProcessor.resolveButtons(Gdx.input.getX(),
