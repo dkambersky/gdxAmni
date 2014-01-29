@@ -9,23 +9,30 @@ import com.badlogic.gdx.InputMultiplexer;
 
 public class GameAmn extends Game {
 
-	MainMenuScreen mainMenuScreen;
-	GameplayScreen gameplayScreen;
+	public MainMenuScreen mainMenuScreen;
+	public GameplayScreen gameplayScreen;
+	public InputMultiplexer multiplexer;
+	public int currentScreen = -1;
+	public AmniInputProcessor standardProcessor;
 
 	@Override
 	public void create() {
 
 		// Input processing
 
-		InputMultiplexer multiplexer = new InputMultiplexer();
-		multiplexer.addProcessor(new AmniInputProcessor(this));
+		standardProcessor = new AmniInputProcessor(this);
+		multiplexer = new InputMultiplexer();
+		multiplexer.addProcessor(standardProcessor);
 
 		Gdx.input.setInputProcessor(multiplexer);
 
 		// Screen creation
 		mainMenuScreen = new MainMenuScreen(this);
+
 		gameplayScreen = new GameplayScreen(this);
+		standardProcessor.activeScreen = mainMenuScreen;
 		setScreen(mainMenuScreen);
+		currentScreen = 0;
 
 	}
 
