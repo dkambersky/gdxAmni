@@ -21,10 +21,11 @@ public class GameAmn extends Game {
 	@Override
 	public void create() {
 		// Riot API
+
+		json = new Json();
 		json.setSummoner("Davefin", Region.EUNE);
 
 		// Input processing
-
 		standardProcessor = new AmniInputProcessor(this);
 		multiplexer = new InputMultiplexer();
 		multiplexer.addProcessor(standardProcessor);

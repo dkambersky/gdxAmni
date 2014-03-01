@@ -2,6 +2,7 @@ package me.xcabbage.amniora.apis;
 
 import net.enigmablade.riotapi.RiotApi;
 import net.enigmablade.riotapi.constants.Region;
+import net.enigmablade.riotapi.constants.Season;
 import net.enigmablade.riotapi.exceptions.RiotApiException;
 import net.enigmablade.riotapi.types.Summoner;
 
@@ -24,6 +25,15 @@ public class Json {
 	}
 
 	public boolean setSummoner(String name) {
+		try {
+			profile = api.getSummoner(Region.EUNE, name);
+			return true;
+		} catch (RiotApiException e) {
+
+			e.printStackTrace();
+
+			return false;
+		}
 
 	}
 
@@ -49,6 +59,16 @@ public class Json {
 			e.printStackTrace();
 
 			return false;
+		}
+	}
+
+	public void dump() {
+		try {
+			System.out.println(api.getStatsMethod().getStatSummaries(
+					profile.getRegion(), profile.getId(), Season.SEASON_4));
+		} catch (RiotApiException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 }
