@@ -64,7 +64,8 @@ public class AmniInputProcessor implements InputProcessor {
 			break;
 
 		case 1:
-			System.out.println("Opening stats");
+			System.out.println("Opening staAAAts");
+			System.out.println("lel " + game.json.getLevel());
 			break;
 		case 2:
 			System.out.println("Initializing Play");

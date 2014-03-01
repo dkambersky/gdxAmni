@@ -1,5 +1,7 @@
 package me.xcabbage.amniora;
 
+import net.enigmablade.riotapi.constants.Region;
+import me.xcabbage.amniora.apis.Json;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.screen.*;
 
@@ -14,9 +16,12 @@ public class GameAmn extends Game {
 	public InputMultiplexer multiplexer;
 	public int currentScreen = -1;
 	public AmniInputProcessor standardProcessor;
+	public Json json;
 
 	@Override
 	public void create() {
+		// Riot API
+		json.setSummoner("Davefin", Region.EUNE);
 
 		// Input processing
 
