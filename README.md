@@ -1,4 +1,4 @@
-Amniora Primary branch (pre-Alpha)
+Amniora 
 ========
 
 A repo for the Amniora Game project. 
@@ -15,9 +15,4 @@ Concept:
 - should involve techtrees
 - hopefully once multiplayer
 
-Written in Java; implementing LibGDX.
-
-
-
-
-
+Written in Java; implementing LibGDX & TheEnigmaBlade's Roit API
