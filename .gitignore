@@ -217,3 +217,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+*.class
+Amniora-desktop/bin/me/xcabbage/amniora/Main.class
