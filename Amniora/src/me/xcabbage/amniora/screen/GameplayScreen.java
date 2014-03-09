@@ -62,11 +62,12 @@ public class GameplayScreen implements Screen {
 		camera.lookAt(0, 0, 0);
 		camera.near = 0.1f;
 		camera.far = 300f;
+
 		camera.update();
 
 		// controls
 		camController = new CameraInputController(camera);
-
+		camera.translate(-5, 0, 0);
 		// Lighting init
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f,
@@ -74,6 +75,8 @@ public class GameplayScreen implements Screen {
 
 		environment.add(new DirectionalLight().set(0.8f, 0.8f, 0.8f, -1f,
 				-0.8f, -0.2f));
+		environment.add(new DirectionalLight().set(-0.8f, -0.8f, -0.8f, 1f,
+				0.8f, 0.2f));
 
 		// Model init
 		ModelBuilder modelBuilder = new ModelBuilder();
@@ -85,17 +88,17 @@ public class GameplayScreen implements Screen {
 		// Old || unused methods
 		batch = new SpriteBatch();
 		// texture = new Texture(Gdx.files.internal("data/libgdx.png"));
-		texture = new Texture(Gdx.files.internal("data/earth.jpg"));
+		texture = new Texture(Gdx.files.internal("data/earth2.jpg"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		modelBox = modelBuilder.createBox(5f, 5f, 5f, new Material(
-				ColorAttribute.createDiffuse(Color.RED)), Usage.Position
-				| Usage.Normal);
-
-		sprite = new Sprite(region);
-		sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-		sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
+		// modelBox = modelBuilder.createBox(5f, 5f, 5f, new Material(
+		// ColorAttribute.createDiffuse(Color.RED)), Usage.Position
+		// | Usage.Normal);
+		//
+		// sprite = new Sprite(region);
+		// sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
+		// sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
+		// sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
 
 		loading = true;
 
@@ -134,7 +137,7 @@ public class GameplayScreen implements Screen {
 
 			}
 			ball.materials.get(0).set(
-					new Material(ColorAttribute.createDiffuse(color)));
+					new Material(ColorAttribute.createSpecular(color)));
 			instances.add(ball);
 		}
 
