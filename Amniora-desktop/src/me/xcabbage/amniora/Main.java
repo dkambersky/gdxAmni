@@ -7,7 +7,7 @@ public class Main {
 	public static void main(String[] args) {
 		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
 		cfg.title = "Amniora";
-		cfg.useGL20 = false;
+		cfg.useGL20 = true;
 		cfg.width = 1024;
 		cfg.height = 690;
 

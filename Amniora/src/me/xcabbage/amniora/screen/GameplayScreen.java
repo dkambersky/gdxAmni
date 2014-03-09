@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -48,7 +49,7 @@ public class GameplayScreen implements Screen {
 
 	public GameplayScreen(final GameAmn gam) {
 		game = gam;
-		Gdx.gl.glEnable(GL10.GL_TEXTURE_2D);
+		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		modelBatch = new ModelBatch();
 		float w = Gdx.graphics.getWidth();
@@ -83,7 +84,8 @@ public class GameplayScreen implements Screen {
 
 		// Old || unused methods
 		batch = new SpriteBatch();
-		texture = new Texture(Gdx.files.internal("data/libgdx.png"));
+		// texture = new Texture(Gdx.files.internal("data/libgdx.png"));
+		texture = new Texture(Gdx.files.internal("data/earth.jpg"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
 		modelBox = modelBuilder.createBox(5f, 5f, 5f, new Material(
