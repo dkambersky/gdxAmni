@@ -27,7 +27,9 @@ import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 
 public class GameplayScreen implements Screen {
@@ -46,6 +48,7 @@ public class GameplayScreen implements Screen {
 	public boolean loading;
 	public Mesh mesh;
 	public ModelInstance moving;
+	public Point cabbage
 
 	public GameplayScreen(final GameAmn gam) {
 		game = gam;
@@ -219,4 +222,38 @@ public class GameplayScreen implements Screen {
 		texture.dispose();
 	}
 
+	//Camera rotation
+
+	 /** 
+	   * Rotates the camera around the current center of screen projected on xz-plane
+	   * @author radioking from Badlogic forum (libGDX)
+	   * @param angle rotation angle in degrees.
+	   */
+	 public void orbitLookAt(float angle)
+	 {
+		Vector3 lookAtPoint = new Vector3(0,0,0);
+		Ray cameraViewRay = camera.getPickRay(0, 0);
+	        // (1) get intersection point for
+	        //     camera viewing direction and xz-plane
+	        cameraViewRay.set(camera.position, camera.direction);
+	        Intersector.intersectRayPlane(cameraViewRay, xzPlane, lookAtPoint);
+	 
+	       // (2) calculate radius between
+	        //     camera position projected on xz-plane
+	        //     and the intersection point from (1)
+	        orbitRadius = lookAtPoint.dst(cameraPosition.set(camera.position));
+	 
+
+	       // (3) move camera to intersection point from (1)
+	        camera.position.set(lookAtPoint);
+	                
+	        // (4) rotate camera by 1° around y-axis
+	        //     according to winding clockwise/counter-clockwise
+	        camera.rotate(angle, 0, 1, 0);
+	                
+	        // (5) move camera back by radius
+	        orbitReturnVector.set(camera.direction.tmp().mul(-orbitRadius));
+	        camera.translate(orbitReturnVector.x, orbitReturnVector.y, orbitReturnVector.z);
+	 }
+	
 }
