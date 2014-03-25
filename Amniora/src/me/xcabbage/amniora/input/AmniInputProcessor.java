@@ -5,18 +5,24 @@ import me.xcabbage.amniora.screen.GameplayScreen;
 import me.xcabbage.amniora.screen.MainMenuScreen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.math.Vector3;
 
 public class AmniInputProcessor implements InputProcessor {
 	GameAmn game;
 	public MainMenuScreen activeScreen;
-
+	public boolean rotating;
+	public int direction;
 	int buttonPixels[][] = { { 116, 290, 236, 320, }, { 160, 370, 302, 408, },
-			{ 236, 448, 436, 482, }, { 370, 518, 468, 556 }
+
+	{ 236, 448, 436, 482, }, { 370, 518, 468, 556 }
 
 	};
+	private Camera cam;
 
 	public AmniInputProcessor(final GameAmn gam) {
 		game = gam;
@@ -25,14 +31,45 @@ public class AmniInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
+		switch (keycode) {
+		case Input.Keys.O:
+			rotating = true;
+			direction = 1;
+			return true;
+		case Input.Keys.P:
+			rotating = true;
+			direction = -1;
+			return true;
 
-		return false;
+		case Input.Keys.ESCAPE:
+			System.out.println("LEL");
+			game.dispose();
+			game.pause();
+			return true;
+
+		default:
+			return false;
+
+		}
+	}
+
+	public void setCamera(Camera cam) {
+		this.cam = cam;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
-		return false;
+		switch (keycode) {
+		case Input.Keys.O:
+			rotating = false;
+			return true;
+		case Input.Keys.P:
+			rotating = false;
+			return true;
+
+		default:
+			return false;
+		}
 	}
 
 	@Override
@@ -179,4 +216,22 @@ public class AmniInputProcessor implements InputProcessor {
 	public String toString() {
 		return "sup";
 	}
+
+	public void update() {
+		if (rotating)
+			rotateCamera();
+
+	}
+
+	public void rotateCamera() {
+		if (direction == 1) {
+			cam.rotateAround(new Vector3(1, 2, 3), new Vector3(0, 3, 0), 5f);
+		} else if (direction == -1) {
+			cam.rotateAround(new Vector3(-1, -2, -3), new Vector3(0, -3, 0), 5f);
+		} else
+			System.out.println("Wrong parameter passed, nigga");
+		cam.update();
+
+	}
+
 }

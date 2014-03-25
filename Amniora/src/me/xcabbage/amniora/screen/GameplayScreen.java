@@ -1,8 +1,10 @@
 package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
+import me.xcabbage.amniora.input.AmniInputProcessor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -12,8 +14,6 @@ import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.VertexAttributes.Usage;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -21,25 +21,21 @@ import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
-import com.badlogic.gdx.graphics.g3d.RenderableProvider;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.badlogic.gdx.utils.Array;
 
 public class GameplayScreen implements Screen {
-	private GameAmn game;
 	private PerspectiveCamera camera;
 	private SpriteBatch batch;
 	private Texture texture;
-	private Sprite sprite;
-	private Model model, modelBox;
-	private ModelInstance instance;
 	private ModelBatch modelBatch;
 	private Environment environment;
 	public CameraInputController camController;
@@ -48,10 +44,9 @@ public class GameplayScreen implements Screen {
 	public boolean loading;
 	public Mesh mesh;
 	public ModelInstance moving;
-	public Point cabbage
+	InputMultiplexer multiplexer;
 
 	public GameplayScreen(final GameAmn gam) {
-		game = gam;
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		modelBatch = new ModelBatch();
@@ -65,12 +60,18 @@ public class GameplayScreen implements Screen {
 		camera.lookAt(0, 0, 0);
 		camera.near = 0.1f;
 		camera.far = 300f;
-
+		camera.translate(-5, 0, 0);
 		camera.update();
 
 		// controls
+
+		multiplexer = new InputMultiplexer();
 		camController = new CameraInputController(camera);
-		camera.translate(-5, 0, 0);
+		multiplexer.addProcessor(camController);
+		multiplexer.addProcessor(new AmniInputProcessor(gam));
+		((AmniInputProcessor) multiplexer.getProcessors().get(1))
+				.setCamera(camera);
+
 		// Lighting init
 		environment = new Environment();
 		environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 0.4f,
@@ -81,8 +82,7 @@ public class GameplayScreen implements Screen {
 		environment.add(new DirectionalLight().set(-0.8f, -0.8f, -0.8f, 1f,
 				0.8f, 0.2f));
 
-		// Model init
-		ModelBuilder modelBuilder = new ModelBuilder();
+		new ModelBuilder();
 
 		assets = new AssetManager();
 		assets.load("data/ship.g3db", Model.class);
@@ -93,15 +93,7 @@ public class GameplayScreen implements Screen {
 		// texture = new Texture(Gdx.files.internal("data/libgdx.png"));
 		texture = new Texture(Gdx.files.internal("data/earth2.jpg"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		TextureRegion region = new TextureRegion(texture, 0, 0, 512, 275);
-		// modelBox = modelBuilder.createBox(5f, 5f, 5f, new Material(
-		// ColorAttribute.createDiffuse(Color.RED)), Usage.Position
-		// | Usage.Normal);
-		//
-		// sprite = new Sprite(region);
-		// sprite.setSize(0.9f, 0.9f * sprite.getHeight() / sprite.getWidth());
-		// sprite.setOrigin(sprite.getWidth() / 2, sprite.getHeight() / 2);
-		// sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
+		new TextureRegion(texture, 0, 0, 512, 275);
 
 		loading = true;
 
@@ -165,12 +157,14 @@ public class GameplayScreen implements Screen {
 
 		// // DRAWING UP
 		// batch.end();
-		camController.update();
+		if (camController != null)
+			camController.update();
 		texture.bind();
 		modelBatch.begin(camera);
 		modelBatch.render(instances, environment);
 
 		modelBatch.end();
+		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
 		// updateGame();
 
 	}
@@ -198,7 +192,7 @@ public class GameplayScreen implements Screen {
 
 	@Override
 	public void show() {
-		Gdx.input.setInputProcessor(camController);
+		Gdx.input.setInputProcessor(multiplexer);
 	}
 
 	@Override
@@ -222,38 +216,47 @@ public class GameplayScreen implements Screen {
 		texture.dispose();
 	}
 
-	//Camera rotation
+	// Camera rotation
 
-	 /** 
-	   * Rotates the camera around the current center of screen projected on xz-plane
-	   * @author radioking from Badlogic forum (libGDX)
-	   * @param angle rotation angle in degrees.
-	   */
-	 public void orbitLookAt(float angle)
-	 {
-		Vector3 lookAtPoint = new Vector3(0,0,0);
-		Ray cameraViewRay = camera.getPickRay(0, 0);
-	        // (1) get intersection point for
-	        //     camera viewing direction and xz-plane
-	        cameraViewRay.set(camera.position, camera.direction);
-	        Intersector.intersectRayPlane(cameraViewRay, xzPlane, lookAtPoint);
-	 
-	       // (2) calculate radius between
-	        //     camera position projected on xz-plane
-	        //     and the intersection point from (1)
-	        orbitRadius = lookAtPoint.dst(cameraPosition.set(camera.position));
-	 
+	/**
+	 * Rotates the camera around the current center of screen projected on
+	 * xz-plane
+	 * 
+	 * @author radioking from Badlogic forum (libGDX)
+	 * @param angle
+	 *            rotation angle in degrees.
+	 */
+	@SuppressWarnings("deprecation")
+	public void orbitLookAt(float angle) {
+		Plane xzPlane = new Plane(new Vector3(1, 0, 2), new Vector3(2, 0, 5),
+				new Vector3(6, 0, 8));
+		Vector3 lookAtPoint = new Vector3(0, 0, 0);
+		Ray cameraViewRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0));
+		Vector3 cameraPosition = new Vector3(0, 0, 0), orbitReturnVector = new Vector3(
+				0, 0, 0);
+		float orbitRadius;
 
-	       // (3) move camera to intersection point from (1)
-	        camera.position.set(lookAtPoint);
-	                
-	        // (4) rotate camera by 1° around y-axis
-	        //     according to winding clockwise/counter-clockwise
-	        camera.rotate(angle, 0, 1, 0);
-	                
-	        // (5) move camera back by radius
-	        orbitReturnVector.set(camera.direction.tmp().mul(-orbitRadius));
-	        camera.translate(orbitReturnVector.x, orbitReturnVector.y, orbitReturnVector.z);
-	 }
-	
+		// (1) get intersection point for
+		// camera viewing direction and xz-plane
+		cameraViewRay.set(camera.position, camera.direction);
+		Intersector.intersectRayPlane(cameraViewRay, xzPlane, lookAtPoint);
+
+		// (2) calculate radius between
+		// camera position projected on xz-plane
+		// and the intersection point from (1)
+		orbitRadius = lookAtPoint.dst(cameraPosition.set(camera.position));
+
+		// (3) move camera to intersection point from (1)
+		camera.position.set(lookAtPoint);
+
+		// (4) rotate camera by 1° around y-axis
+		// according to winding clockwise/counter-clockwise
+		camera.rotate(angle, 0, 1, 0);
+
+		// (5) move camera back by radius
+		orbitReturnVector.set(camera.direction.tmp().scl(-orbitRadius));
+		camera.translate(orbitReturnVector.x, orbitReturnVector.y,
+				orbitReturnVector.z);
+	}
+
 }
