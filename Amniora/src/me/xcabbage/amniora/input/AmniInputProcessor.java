@@ -42,13 +42,11 @@ public class AmniInputProcessor implements InputProcessor {
 			return true;
 
 		case Input.Keys.ESCAPE:
-			System.out.println("LEL");
 			game.dispose();
-			game.pause();
+			Gdx.app.exit();
 			return true;
-
 		default:
-			return false;
+			return true;
 
 		}
 	}
@@ -86,7 +84,7 @@ public class AmniInputProcessor implements InputProcessor {
 			break;
 		}
 
-		return false;
+		return true;
 	}
 
 	public void buttonClicked(int button) {
@@ -225,9 +223,9 @@ public class AmniInputProcessor implements InputProcessor {
 
 	public void rotateCamera() {
 		if (direction == 1) {
-			cam.rotateAround(new Vector3(1, 2, 3), new Vector3(0, 3, 0), 5f);
+			cam.rotateAround(Vector3.Zero, new Vector3(0, 1, 0), 5f);
 		} else if (direction == -1) {
-			cam.rotateAround(new Vector3(-1, -2, -3), new Vector3(0, -3, 0), 5f);
+			cam.rotateAround(Vector3.Zero, new Vector3(0, 1, 0), -5f);
 		} else
 			System.out.println("Wrong parameter passed, nigga");
 		cam.update();

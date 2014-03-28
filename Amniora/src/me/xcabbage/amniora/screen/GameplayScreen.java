@@ -56,11 +56,12 @@ public class GameplayScreen implements Screen {
 		// Camera init
 		// g3dbect
 		camera = new PerspectiveCamera(67, w, h);
-		camera.position.set(10f, 10f, 10f);
+	
+		camera.position.set(5f, -0.11f, 5f);
 		camera.lookAt(0, 0, 0);
 		camera.near = 0.1f;
 		camera.far = 300f;
-		camera.translate(-5, 0, 0);
+
 		camera.update();
 
 		// controls
@@ -68,6 +69,7 @@ public class GameplayScreen implements Screen {
 		multiplexer = new InputMultiplexer();
 		camController = new CameraInputController(camera);
 		multiplexer.addProcessor(camController);
+
 		multiplexer.addProcessor(new AmniInputProcessor(gam));
 		((AmniInputProcessor) multiplexer.getProcessors().get(1))
 				.setCamera(camera);
@@ -103,11 +105,13 @@ public class GameplayScreen implements Screen {
 
 		// PLANET
 		Model planet = assets.get("data/planet_colors.g3db", Model.class);
-		ModelInstance planetInstance = new ModelInstance(planet);
+		ModelInstance planetInstance = new ModelInstance(planet, 0, 0, 0);
+
 		Material mat = planetInstance.materials.get(0);
 		mat.set(new TextureAttribute(TextureAttribute.Diffuse, texture));
 
 		moving = planetInstance;
+
 		instances.add(planetInstance);
 
 		// SPHERES AROUND
@@ -132,7 +136,7 @@ public class GameplayScreen implements Screen {
 
 			}
 			ball.materials.get(0).set(
-					new Material(ColorAttribute.createSpecular(color)));
+					new Material(ColorAttribute.createDiffuse(color)));
 			instances.add(ball);
 		}
 
