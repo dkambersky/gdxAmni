@@ -80,7 +80,11 @@ public class AmniInputProcessor implements InputProcessor {
 			scrolled(1);
 			break;
 		case ' ':
-			buttonClicked(activeScreen.activeButton);
+			try {
+				buttonClicked(activeScreen.activeButton);
+			} catch (Exception e) {
+				;
+			}
 			break;
 		}
 
@@ -148,13 +152,13 @@ public class AmniInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		// TODO Auto-generated method stub
+
 		return false;
 	}
 

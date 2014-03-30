@@ -56,9 +56,9 @@ public class GameplayScreen implements Screen {
 		// Camera init
 		// g3dbect
 		camera = new PerspectiveCamera(67, w, h);
-	
-		camera.position.set(5f, -0.11f, 5f);
-		camera.lookAt(0, 0, 0);
+
+		camera.position.set(5f, 0, 5f);
+		camera.lookAt(0, -1, 0);
 		camera.near = 0.1f;
 		camera.far = 300f;
 
@@ -169,24 +169,42 @@ public class GameplayScreen implements Screen {
 
 		modelBatch.end();
 		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
-		// updateGame();
+		updateGame();
 
 	}
 
 	public void updateGame() {
 		try {
-			moving.transform.translate(wrapPoint());
+
+			for (int x = 0; x <= 4; x++) {
+				Vector3 pos = instances.get(x).transform
+						.getTranslation(Vector3.Zero);
+				System.out.println("Position: " + pos.x + ", " + pos.y + ", "
+						+ pos.z);
+				Vector3 wrapper = new Vector3(pos).sub(wrapPoint(pos,
+						Vector3.Y, 5));
+				instances.get(x).transform.translate(wrapper);
+				System.out.println("Translating by: " + wrapper);
+
+			}
 
 		} catch (Exception e) {
 
 		}
-		// for(int x = 1;x<4;x++)
-		// instances.get(x).transform.translate(0,0,1);
 
 	}
 
-	Vector3 wrapPoint() {
-		return new Vector3(0, 0, -0.04f);
+	Vector3 wrapPoint(Vector3 position, Vector3 axis, float angle) {
+
+		Vector3 temp = new Vector3(Vector3.Zero);
+		Vector3 fin = new Vector3(position);
+		temp.sub(position);
+		fin.add(temp);
+		fin.rotate(axis, angle);
+		temp.rotate(axis, angle);
+		fin.add(-temp.x, -temp.y, -temp.z);
+		return fin;
+
 	}
 
 	@Override
