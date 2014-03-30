@@ -170,13 +170,13 @@ public class GameplayScreen implements Screen {
 
 		modelBatch.end();
 		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
-
+		updateGame();
 	}
 
 	public void updateGame() {
 		try {
 
-			for (int x = 1; x <= 1; x++) {
+			for (int x = 1; x <= 4; x++) {
 				Vector3 pos = instances.get(x).transform
 						.getTranslation(Vector3.Zero);
 				System.out.println();
