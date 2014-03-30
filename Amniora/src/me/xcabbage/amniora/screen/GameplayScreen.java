@@ -179,17 +179,9 @@ public class GameplayScreen implements Screen {
 			for (int x = 1; x <= 4; x++) {
 				Vector3 pos = instances.get(x).transform
 						.getTranslation(Vector3.Zero);
-				System.out.println();
-				System.out
-						.println("-----------Debug mode running. Below are the calculations:--------------");
-
-				System.out.println("Initial position: " + pos.x + ", " + pos.y
-						+ ", " + pos.z);
-				Vector3 wrapper = new Vector3(pos).sub(wrapPoint(pos,
-						Vector3.Y, 1));
-				instances.get(x).transform.translate(wrapper);
-				System.out.println("Translating by: " + wrapper);
-
+				Vector3 posA = wrapPoint(pos, Vector3.Y, 5);
+				System.out.println("Original: " + pos + " | New: " + posA);
+				instances.get(x).transform.translate(posA.sub(pos));
 			}
 
 		} catch (Exception e) {
@@ -199,25 +191,19 @@ public class GameplayScreen implements Screen {
 	}
 
 	Vector3 wrapPoint(Vector3 position, Vector3 axis, float angle) {
-
-		Vector3 temp = new Vector3(Vector3.Zero);
-		Vector3 fin = new Vector3(position);
-		System.out.println("Initial vector size | temp: " + temp + " | fin: "
-				+ fin);
-		temp.sub(position);
-
-		fin.add(temp);
-
-		System.out.println("Step 1: +-          | temp: " + temp + " | fin: "
-				+ fin);
-		fin.rotate(axis, angle);
+		Vector3 temp = new Vector3(position);
 		temp.rotate(axis, angle);
-		System.out.println("Step 2: Rotation    | temp: " + temp + " | fin: "
-				+ fin);
-		fin.add(-temp.x, -temp.y, -temp.z);
-		System.out.println("Step 3: temp-fin    | temp: " + temp + " | fin: "
-				+ fin);
-		return fin;
+		return temp;
+
+	}
+
+	Vector3 wrapPoint(Vector3 position, Vector3 around, Vector3 axis,
+			float angle) {
+		Vector3 temp = new Vector3(position);
+		temp.sub(around);
+		temp.rotate(axis, angle);
+		temp.add(around);
+		return temp;
 
 	}
 
