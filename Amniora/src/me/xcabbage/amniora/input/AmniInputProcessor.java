@@ -14,7 +14,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class AmniInputProcessor implements InputProcessor {
 	GameAmn game;
-	public MainMenuScreen activeScreen;
+	public Screen activeScreen;
 	public boolean rotating;
 	public int direction;
 	int buttonPixels[][] = { { 116, 290, 236, 320, }, { 160, 370, 302, 408, },
@@ -79,9 +79,11 @@ public class AmniInputProcessor implements InputProcessor {
 		case 's':
 			scrolled(1);
 			break;
+		case 'r':
+			((GameplayScreen) game.getScreen()).updateGame();
 		case ' ':
 			try {
-				buttonClicked(activeScreen.activeButton);
+				buttonClicked(((MainMenuScreen) activeScreen).activeButton);
 			} catch (Exception e) {
 				;
 			}
@@ -121,7 +123,7 @@ public class AmniInputProcessor implements InputProcessor {
 			System.out.println("Unknown button pressed. Wth.");
 
 		}
-		activeScreen.activeButton = button;
+		((MainMenuScreen) activeScreen).activeButton = button;
 
 	}
 
@@ -174,7 +176,7 @@ public class AmniInputProcessor implements InputProcessor {
 			if (game.currentScreen == 0) {
 				for (int a = 0; a < 4; a++) {
 					if (hoveringOverButton(a, screenX, screenY)
-							|| a == activeScreen.activeButton) {
+							|| a == ((MainMenuScreen) activeScreen).activeButton) {
 
 						if (game.mainMenuScreen.buttonHighlight[a] <= game.mainMenuScreen.MAX_ALPHA - 0.03f) {
 							game.mainMenuScreen.buttonHighlight[a] = game.mainMenuScreen.buttonHighlight[a] + 0.03f;
@@ -195,6 +197,7 @@ public class AmniInputProcessor implements InputProcessor {
 	public boolean scrolled(int amount) {
 		try {
 
+			MainMenuScreen activeScreen = (MainMenuScreen) this.activeScreen;
 			if (activeScreen.activeButton == -1) {
 				activeScreen.activeButton = 0;
 				return true;

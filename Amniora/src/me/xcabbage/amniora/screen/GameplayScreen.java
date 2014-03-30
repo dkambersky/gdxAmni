@@ -4,6 +4,7 @@ import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
@@ -169,20 +170,23 @@ public class GameplayScreen implements Screen {
 
 		modelBatch.end();
 		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
-		updateGame();
 
 	}
 
 	public void updateGame() {
 		try {
 
-			for (int x = 0; x <= 4; x++) {
+			for (int x = 1; x <= 1; x++) {
 				Vector3 pos = instances.get(x).transform
 						.getTranslation(Vector3.Zero);
-				System.out.println("Position: " + pos.x + ", " + pos.y + ", "
-						+ pos.z);
+				System.out.println();
+				System.out
+						.println("-----------Debug mode running. Below are the calculations:--------------");
+
+				System.out.println("Initial position: " + pos.x + ", " + pos.y
+						+ ", " + pos.z);
 				Vector3 wrapper = new Vector3(pos).sub(wrapPoint(pos,
-						Vector3.Y, 5));
+						Vector3.Y, 1));
 				instances.get(x).transform.translate(wrapper);
 				System.out.println("Translating by: " + wrapper);
 
@@ -198,11 +202,21 @@ public class GameplayScreen implements Screen {
 
 		Vector3 temp = new Vector3(Vector3.Zero);
 		Vector3 fin = new Vector3(position);
+		System.out.println("Initial vector size | temp: " + temp + " | fin: "
+				+ fin);
 		temp.sub(position);
+
 		fin.add(temp);
+
+		System.out.println("Step 1: +-          | temp: " + temp + " | fin: "
+				+ fin);
 		fin.rotate(axis, angle);
 		temp.rotate(axis, angle);
+		System.out.println("Step 2: Rotation    | temp: " + temp + " | fin: "
+				+ fin);
 		fin.add(-temp.x, -temp.y, -temp.z);
+		System.out.println("Step 3: temp-fin    | temp: " + temp + " | fin: "
+				+ fin);
 		return fin;
 
 	}
