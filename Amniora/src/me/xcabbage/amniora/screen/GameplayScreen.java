@@ -61,7 +61,7 @@ public class GameplayScreen implements Screen {
 		camera.position.set(5f, 0, 5f);
 		camera.lookAt(0, -1, 0);
 		camera.near = 0.1f;
-		camera.far = 300f;
+		camera.far = 100f;
 
 		camera.update();
 
@@ -88,15 +88,11 @@ public class GameplayScreen implements Screen {
 		new ModelBuilder();
 
 		assets = new AssetManager();
-		assets.load("data/ship.g3db", Model.class);
+
 		assets.load("data/planet_colors.g3db", Model.class);
 
-		// Old || unused methods
-		batch = new SpriteBatch();
-		// texture = new Texture(Gdx.files.internal("data/libgdx.png"));
 		texture = new Texture(Gdx.files.internal("data/earth2.jpg"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		new TextureRegion(texture, 0, 0, 512, 275);
 
 		loading = true;
 
@@ -154,14 +150,6 @@ public class GameplayScreen implements Screen {
 
 		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT | GL10.GL_DEPTH_BUFFER_BIT);
 
-		// batch.setProjectionMatrix(camera.combined);
-		// batch.begin();
-		// DRAWING BELOW
-
-		// sprite.draw(batch);
-
-		// // DRAWING UP
-		// batch.end();
 		if (camController != null)
 			camController.update();
 		texture.bind();
@@ -236,49 +224,6 @@ public class GameplayScreen implements Screen {
 	public void dispose() {
 		batch.dispose();
 		texture.dispose();
-	}
-
-	// Camera rotation
-
-	/**
-	 * Rotates the camera around the current center of screen projected on
-	 * xz-plane
-	 * 
-	 * @author radioking from Badlogic forum (libGDX)
-	 * @param angle
-	 *            rotation angle in degrees.
-	 */
-	@SuppressWarnings("deprecation")
-	public void orbitLookAt(float angle) {
-		Plane xzPlane = new Plane(new Vector3(1, 0, 2), new Vector3(2, 0, 5),
-				new Vector3(6, 0, 8));
-		Vector3 lookAtPoint = new Vector3(0, 0, 0);
-		Ray cameraViewRay = new Ray(new Vector3(0, 0, 0), new Vector3(0, -1, 0));
-		Vector3 cameraPosition = new Vector3(0, 0, 0), orbitReturnVector = new Vector3(
-				0, 0, 0);
-		float orbitRadius;
-
-		// (1) get intersection point for
-		// camera viewing direction and xz-plane
-		cameraViewRay.set(camera.position, camera.direction);
-		Intersector.intersectRayPlane(cameraViewRay, xzPlane, lookAtPoint);
-
-		// (2) calculate radius between
-		// camera position projected on xz-plane
-		// and the intersection point from (1)
-		orbitRadius = lookAtPoint.dst(cameraPosition.set(camera.position));
-
-		// (3) move camera to intersection point from (1)
-		camera.position.set(lookAtPoint);
-
-		// (4) rotate camera by 1° around y-axis
-		// according to winding clockwise/counter-clockwise
-		camera.rotate(angle, 0, 1, 0);
-
-		// (5) move camera back by radius
-		orbitReturnVector.set(camera.direction.tmp().scl(-orbitRadius));
-		camera.translate(orbitReturnVector.x, orbitReturnVector.y,
-				orbitReturnVector.z);
 	}
 
 }
