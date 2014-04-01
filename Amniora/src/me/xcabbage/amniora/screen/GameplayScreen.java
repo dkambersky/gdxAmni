@@ -167,8 +167,8 @@ public class GameplayScreen implements Screen {
 			for (int x = 1; x <= 4; x++) {
 				Vector3 pos = instances.get(x).transform
 						.getTranslation(Vector3.Zero);
-				Vector3 posA = wrapPoint(pos, Vector3.Y, 5);
-				System.out.println("Original: " + pos + " | New: " + posA);
+				Vector3 posA = wrapPoint(pos, new Vector3(1,2,5), 5);
+				
 				instances.get(x).transform.translate(posA.sub(pos));
 			}
 
