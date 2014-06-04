@@ -10,7 +10,10 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 
 public class Json {
-
+	/*
+	 * Just a somewhat useless class I used to test out Riot's League of Legends
+	 * API
+	 */
 	public final String adress = "https://prod.api.pvp.net/api/";
 	public final String apiKey = "9407a2da-aac3-4240-8ce5-e1758ee4bb1d";
 	RiotApi api;
