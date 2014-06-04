@@ -72,7 +72,7 @@ public class GameplayScreen implements Screen {
 	public Color[] pointColor;
 
 	// LOADING - CREATION
-	public GameplayScreen(final GameAmn gam) {
+ 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		modelBatch = new ModelBatch();
@@ -168,7 +168,7 @@ public class GameplayScreen implements Screen {
 		/* translate the vectors to spherical xyz coords */
 		sphereVect = new Vector3[VECTOR_COUNT];
 		for (int a = 0; a < VECTOR_COUNT; a++) {
-			sphereVect[a] = mapFromPlaneToSphere(xzVect[a]);
+			sphereVect[a] = mapFromPlaneToSphere2(xzVect[a]);
 		}
 
 		/* output the final product */
@@ -184,7 +184,7 @@ public class GameplayScreen implements Screen {
 
 	}
 
-	public void doneLoading() {
+ 	public void doneLoading() {
 
 		// PLANET
 		Model planet = assets.get("data/planet_colors.g3db", Model.class);
@@ -301,10 +301,8 @@ public class GameplayScreen implements Screen {
 		updateGame();
 	}
 
-	
-	
 	// UTILITY
-	 
+
 	// translations
 	Vector3 wrapPoint(Vector3 position, Vector3 axis, float angle) {
 		Vector3 temp = new Vector3(position);
