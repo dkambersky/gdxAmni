@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,6 +27,7 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
+import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Plane;
@@ -46,6 +48,10 @@ public class GameplayScreen implements Screen {
 	public Mesh mesh;
 	public ModelInstance moving;
 	InputMultiplexer multiplexer;
+	Pixmap globeMap;
+	MeshBuilder meshBuilder;
+	Mesh globeMesh;
+	Model globeModel;
 
 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
@@ -85,7 +91,12 @@ public class GameplayScreen implements Screen {
 		environment.add(new DirectionalLight().set(-0.8f, -0.8f, -0.8f, 1f,
 				0.8f, 0.2f));
 
-		new ModelBuilder();
+		
+		
+		// MESHES
+		meshBuilder = new MeshBuilder();
+		meshBuilder.sphere(1f, 1f, 1f, 5, 3);
+		mesh = meshBuilder.end();
 
 		assets = new AssetManager();
 
@@ -109,7 +120,7 @@ public class GameplayScreen implements Screen {
 
 		moving = planetInstance;
 
-		instances.add(planetInstance);
+//		instances.add(planetInstance);
 
 		// SPHERES AROUND
 		Color color = Color.WHITE;
@@ -134,7 +145,7 @@ public class GameplayScreen implements Screen {
 			}
 			ball.materials.get(0).set(
 					new Material(ColorAttribute.createDiffuse(color)));
-			instances.add(ball);
+//			instances.add(ball);
 		}
 
 		loading = false;
@@ -167,8 +178,8 @@ public class GameplayScreen implements Screen {
 			for (int x = 1; x <= 4; x++) {
 				Vector3 pos = instances.get(x).transform
 						.getTranslation(Vector3.Zero);
-				Vector3 posA = wrapPoint(pos, new Vector3(1,2,5), 5);
-				
+				Vector3 posA = wrapPoint(pos, new Vector3(1, 2, 5), 5);
+
 				instances.get(x).transform.translate(posA.sub(pos));
 			}
 
