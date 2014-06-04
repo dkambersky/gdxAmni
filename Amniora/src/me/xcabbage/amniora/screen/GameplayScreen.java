@@ -71,6 +71,7 @@ public class GameplayScreen implements Screen {
 	public Vector3[] sphereVect;
 	public Color[] pointColor;
 
+	// LOADING - CREATION
 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
@@ -239,6 +240,31 @@ public class GameplayScreen implements Screen {
 		loading = false;
 	}
 
+	// ----- GAME LOOPS-----
+
+	// updates
+	public void updateGame() {
+		// orbitEverything();
+
+	}
+
+	void orbitEverything() {
+		try {
+
+			for (int x = 1; x <= 4; x++) {
+				Vector3 pos = instances.get(x).transform
+						.getTranslation(Vector3.Zero);
+				Vector3 posA = wrapPoint(pos, new Vector3(1, 2, 5), 5);
+
+				instances.get(x).transform.translate(posA.sub(pos));
+			}
+
+		} catch (Exception e) {
+
+		}
+	}
+
+	// render
 	@Override
 	public void render(float delta) {
 		if (loading && assets.update())
@@ -275,28 +301,10 @@ public class GameplayScreen implements Screen {
 		updateGame();
 	}
 
-	// game updates
-	public void updateGame() {
-		// orbitEverything();
-
-	}
-
-	void orbitEverything() {
-		try {
-
-			for (int x = 1; x <= 4; x++) {
-				Vector3 pos = instances.get(x).transform
-						.getTranslation(Vector3.Zero);
-				Vector3 posA = wrapPoint(pos, new Vector3(1, 2, 5), 5);
-
-				instances.get(x).transform.translate(posA.sub(pos));
-			}
-
-		} catch (Exception e) {
-
-		}
-	}
-
+	
+	
+	// UTILITY
+	 
 	// translations
 	Vector3 wrapPoint(Vector3 position, Vector3 axis, float angle) {
 		Vector3 temp = new Vector3(position);
@@ -328,6 +336,17 @@ public class GameplayScreen implements Screen {
 		// Convert to euclidian space
 		return new Vector3((float) (rho * Math.cos(y)),
 				(float) (rho * Math.sin(y)), z);
+	}
+
+	Vector3 mapFromPlaneToSphere2(Vector2 xzVector) {
+		// Let x, y be a point on your plane (0..1).
+		float x = xzVector.x, y = xzVector.y;
+		float z = -1 + 2 * x;
+		float phi = (float) (2 * Math.PI * y);
+		float theta = (float) Math.asin(z);
+		return new Vector3((float) (Math.cos(theta) * Math.cos(phi)),
+				(float) (Math.cos(theta) * Math.sin(phi)), z);
+
 	}
 
 	// UNUSED METHODS
