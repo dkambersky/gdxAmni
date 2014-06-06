@@ -1,15 +1,14 @@
-/** The MainMenuScreen.java class responsible for displaying and handling the main menu 
+/** The OptionsScreen.java class responsible for showing / modifying settings of the game 
  *
  * @author xCabbage [github.com/xcabbage]
  *
  * @info for the Amniora project [github.com/xcabbage/amniora]
- *      created 1. 10. 2013 10:08:59
+ *      created 6. 6. 2014 12:44:14
  */
 
 package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
-import me.xcabbage.amniora.assets.Assets;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 
 import com.badlogic.gdx.Gdx;
@@ -30,7 +29,8 @@ import com.badlogic.gdx.graphics.g3d.Shader;
  * @author David
  * 
  */
-public class MainMenuScreen implements Screen {
+public class OptionsScreen implements Screen {
+
 	public final float MAX_ALPHA = .38f;
 	public final int buttonCount = 4;
 
@@ -48,7 +48,7 @@ public class MainMenuScreen implements Screen {
 	private boolean fontHighlight;
 	public float[] buttonHighlight = { 0f, 0f, 0f, 0f };
 
-	public MainMenuScreen(final GameAmn gam) {
+	public OptionsScreen(final GameAmn gam) {
 		// Initialization
 		game = gam;
 		float w = Gdx.graphics.getWidth();
@@ -61,25 +61,45 @@ public class MainMenuScreen implements Screen {
 		camera.setToOrtho(false, w, h);
 		camera.update();
 
-		// Initialize Assets.java and load its contents
-		Assets.init();
+		// Loading Fonts
+		F_debug = new BitmapFont();
+		F_buttons = new BitmapFont(
+				Gdx.files.internal("fonts/starcraftPlain.fnt"),
+				Gdx.files.internal("fonts/starcraftPlain.png"), false);
+		F_buttonsHighlight = new BitmapFont(
+				Gdx.files.internal("fonts/starcraftBlue.fnt"),
+				Gdx.files.internal("fonts/starcraftBlue.png"), false);
+		F_buttonsOutline0 = new BitmapFont(
+				Gdx.files.internal("fonts/starcraftBold0.fnt"),
+				Gdx.files.internal("fonts/starcraftBold0.png"), false);
+		F_buttonsOutline1 = new BitmapFont(
+				Gdx.files.internal("fonts/starcraftBold1.fnt"),
+				Gdx.files.internal("fonts/starcraftBold1.png"), false);
+		F_buttonsOutline2 = new BitmapFont(
+				Gdx.files.internal("fonts/starcraftBold2.fnt"),
+				Gdx.files.internal("fonts/starcraftBold2.png"), false);
+		F_buttonsOutline3 = new BitmapFont(
+				Gdx.files.internal("fonts/starcraftBold3.fnt"),
+				Gdx.files.internal("fonts/starcraftBold3.png"), false);
 
-		// load fonts
-		F_debug = Assets.F_debug;
-		F_buttons = Assets.F_buttons;
-		F_buttonsHighlight = Assets.F_buttonsHighlight;
-		F_buttonsOutline0 = Assets.F_buttonsOutline0;
-		F_buttonsOutline1 = Assets.F_buttonsOutline1;
-		F_buttonsOutline2 = Assets.F_buttonsOutline2;
-		F_buttonsOutline3 = Assets.F_buttonsOutline3;
+		// Loading SpriteSheets
+		texture = new Texture(Gdx.files.internal("menuSmaller2.png"));
+		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-		// load textures, spritesheets, sprites
+		// Creating regions from the base texture
+		R_background = new TextureRegion(texture, 0, 0, 2016, 1345);
+		R_planet = new TextureRegion(texture, 0, 1365, 950, 686);
 
-		R_background = Assets.R_background;
-		R_planet = Assets.R_planet;
+		// Initializing sprites from textures
+		S_background = new Sprite(R_background);
+		S_background.setScale(0.52f);
+		S_background.setOrigin(0, 0);
+		S_background.setPosition(0, 0);
 
-		S_background = Assets.S_background;
-		S_planet = Assets.S_planet;
+		S_planet = new Sprite(R_planet);
+		S_planet.setScale(0.32f);
+		S_planet.setOrigin(50, 50);
+		S_planet.setPosition(540, 200);
 
 	}
 
@@ -153,8 +173,11 @@ public class MainMenuScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+		texture.dispose();
 		batch.dispose();
+		F_buttons.dispose();
+		F_buttonsHighlight.dispose();
+		F_debug.dispose();
 
 	}
 
