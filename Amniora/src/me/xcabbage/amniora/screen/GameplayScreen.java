@@ -46,8 +46,9 @@ public class GameplayScreen implements Screen {
 
 	private static final int VECTOR_COUNT = 100;
 	private static final float SQUARE_SIDE = 100;
-	private static final float ORBIT_SCALE = 50;
+	private static final float ORBIT_SCALE = 4;
 	private static final int VECTORS_SQRT = 10;
+	private static final float SPHERE_SCALE = 0.6f;
 
 	private PerspectiveCamera camera;
 	private SpriteBatch batch;
@@ -72,7 +73,7 @@ public class GameplayScreen implements Screen {
 	public Color[] pointColor;
 
 	// LOADING - CREATION
- 	public GameplayScreen(final GameAmn gam) {
+	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		modelBatch = new ModelBatch();
@@ -113,6 +114,7 @@ public class GameplayScreen implements Screen {
 
 		// MESHES
 		/*
+		 * 
 		 * meshBuilder = new MeshBuilder(); meshBuilder.begin(new
 		 * VertexAttributes(new VertexAttribute( Usage.Position, 3,
 		 * "a_position"))); meshBuilder.sphere(1f, 1f, 1f, 5, 3); globeMesh =
@@ -121,10 +123,11 @@ public class GameplayScreen implements Screen {
 		 */
 
 		modelBuilder = new ModelBuilder();
-		// globeModel = modelBuilder.createSphere(5f, 5f, 5f, new Material(
-		// ColorAttribute.createDiffuse(Color.GREEN)), Usage.Position
-		// | Usage.Normal);
-		// instances.add(new ModelInstance(globeModel));
+		globeModel = modelBuilder.createSphere(SPHERE_SCALE, SPHERE_SCALE,
+				SPHERE_SCALE, 32, 32,
+				new Material(ColorAttribute.createDiffuse(Color.GREEN)),
+				Usage.Position | Usage.Normal);
+		// instances.add(new ModelInstance(globeModel, 2, 2, 2));
 
 		// OTHER ASSETS
 		assets = new AssetManager();
@@ -146,7 +149,7 @@ public class GameplayScreen implements Screen {
 				xzVect[count] = new Vector2(i, j);
 				System.out.println("Registered xz vector on position " + count
 						+ ": " + xzVect[count]);
-				switch (count % 4) {
+				switch (count % 6) {
 				case 1:
 					pointColor[count] = Color.RED;
 					break;
@@ -156,8 +159,14 @@ public class GameplayScreen implements Screen {
 				case 3:
 					pointColor[count] = Color.YELLOW;
 					break;
+				case 4:
+					pointColor[count] = Color.BLUE;
+					break;
+				case 5:
+					pointColor[count] = Color.WHITE;
+					break;
 				default:
-					pointColor[count] = Color.GREEN;
+					pointColor[count] = Color.ORANGE;
 					break;
 				}
 
@@ -184,7 +193,8 @@ public class GameplayScreen implements Screen {
 
 	}
 
- 	public void doneLoading() {
+	@SuppressWarnings({ "static-access", "deprecation" })
+	public void doneLoading() {
 
 		// PLANET
 		Model planet = assets.get("data/planet_colors.g3db", Model.class);
@@ -226,17 +236,27 @@ public class GameplayScreen implements Screen {
 		// create small spheres in the xyz world with co-ords and colors taken
 		// from the previous processes
 		Vector3 v;
-
+		meshBuilder = new MeshBuilder();
+		meshBuilder.begin(Usage.Position | Usage.Normal);
 		for (int a = 0; a < VECTOR_COUNT; a++) {
 			v = sphereVect[a];
-			ModelInstance ball = new ModelInstance(planet, v.x * ORBIT_SCALE,
-					v.y * ORBIT_SCALE, v.z * ORBIT_SCALE);
+
+			ModelInstance ball = new ModelInstance(globeModel, v.x
+					* ORBIT_SCALE, v.y * ORBIT_SCALE, v.z * ORBIT_SCALE);
 			ball.materials.get(0).set(
 					new Material(ColorAttribute.createDiffuse(pointColor[a])));
-			instances.add(ball);
-
+			// instances.add(ball);
+			// try to create a mesh off the given vectors
+			meshBuilder.vertex(v, v.nor(), Color.WHITE, null);
 		}
 
+		globeMesh = meshBuilder.end();
+
+		modelBuilder.begin();
+		modelBuilder.part("globeMesh", globeMesh, GL20.GL_TRIANGLES,
+				new Material(ColorAttribute.createDiffuse(Color.MAGENTA)));
+		globeModel = modelBuilder.end();
+		instances.add(new ModelInstance(globeModel));
 		loading = false;
 	}
 
