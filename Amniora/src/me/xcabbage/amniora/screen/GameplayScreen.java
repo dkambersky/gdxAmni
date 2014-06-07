@@ -2,6 +2,7 @@ package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.input.AmniInputProcessor;
+import me.xcabbage.amniora.util.Geometry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -32,6 +33,7 @@ import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
+import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
@@ -235,29 +237,87 @@ public class GameplayScreen implements Screen {
 
 		// create small spheres in the xyz world with co-ords and colors taken
 		// from the previous processes
-		Vector3 v;
-		meshBuilder = new MeshBuilder();
-		meshBuilder.begin(Usage.Position | Usage.Normal);
-		for (int a = 0; a < VECTOR_COUNT; a++) {
-			v = sphereVect[a];
 
-			ModelInstance ball = new ModelInstance(globeModel, v.x
-					* ORBIT_SCALE, v.y * ORBIT_SCALE, v.z * ORBIT_SCALE);
-			ball.materials.get(0).set(
-					new Material(ColorAttribute.createDiffuse(pointColor[a])));
-			// instances.add(ball);
-			// try to create a mesh off the given vectors
-			meshBuilder.vertex(v, v.nor(), Color.WHITE, null);
+		/*
+		 * OLD METHOD
+		 * 
+		 * Vector3 v, tempV; meshBuilder = new MeshBuilder();
+		 * meshBuilder.begin(Usage.Position | Usage.Normal); for (int a = 0; a <
+		 * VECTOR_COUNT; a++) { v = sphereVect[a];
+		 * 
+		 * ModelInstance ball = new ModelInstance(globeModel, v.x ORBIT_SCALE,
+		 * v.y * ORBIT_SCALE, v.z * ORBIT_SCALE); ball.materials.get(0).set( new
+		 * Material(ColorAttribute.createDiffuse(pointColor[a]))); //
+		 * instances.add(ball); // try to create a mesh off the given vectors
+		 * meshBuilder.vertex(v, v.nor(), Color.WHITE, null); }
+		 * 
+		 * globeMesh = meshBuilder.end();
+		 * 
+		 * modelBuilder.begin(); modelBuilder.part("globeMesh", globeMesh,
+		 * GL20.GL_TRIANGLES, new
+		 * Material(ColorAttribute.createDiffuse(Color.MAGENTA))); globeModel =
+		 * modelBuilder.end(); instances.add(new ModelInstance(globeModel));
+		 */
+
+		/* xoppa's method */
+
+		Vector3 v, tempV;
+		ModelBuilder mb = new ModelBuilder();
+		mb.begin();
+
+		/* triangles */
+
+		// MeshPartBuilder builder = mb.part("name", GL20.GL_TRIANGLES,
+		// Usage.Position,
+		// new Material(ColorAttribute.createDiffuse(Color.MAGENTA)));
+		// short index1 = builder.vertex(sphereVect[0], null, null, null);
+		// for (int a = 1; a < VECTOR_COUNT; a += 2) {
+		// try {
+		// short index2 = builder.vertex(sphereVect[a], null, null, null);
+		// short index3 = builder.vertex(sphereVect[a + 1], null, null,
+		// null);
+		// builder.triangle(index1, index3, index2);
+		// index1 = index3;
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// }
+
+		/*
+		 * points
+		 * 
+		 * MeshPartBuilder builder = mb.part("name", GL20.GL_POINTS,
+		 * Usage.Position, new
+		 * Material(ColorAttribute.createDiffuse(Color.MAGENTA))); Vector3
+		 * normal = new Vector3(); for (int a = 0; a < VECTOR_COUNT; a++) { v =
+		 * sphereVect[a]; final short index = builder.vertex(v, null, null,
+		 * null); builder.index(index); }
+		 */
+		Geometry ico = new Geometry();
+
+		MeshPartBuilder builder = mb.part("name", GL20.GL_TRIANGLES,
+				Usage.Position,
+				new Material(ColorAttribute.createDiffuse(Color.BLUE)));
+		for (int a = 0; a < ico.vertices.length; a = a + 9) {
+			Vector3 v1 = new Vector3(ico.vertices[a], ico.vertices[a + 1],
+					ico.vertices[a + 2]);
+			Vector3 v2 = new Vector3(ico.vertices[a + 3], ico.vertices[a + 4],
+					ico.vertices[a + 5]);
+			Vector3 v3 = new Vector3(ico.vertices[a + 6], ico.vertices[a + 7],
+					ico.vertices[a + 8]);
+			builder.triangle(v1, v2, v3);
+			final short index1 = builder.vertex(v1, null, null, null);
+			final short index2 = builder.vertex(v2, null, null, null);
+			final short index3 = builder.vertex(v3, null, null, null);
+			builder.index(index1, index2, index3);
 		}
 
-		globeMesh = meshBuilder.end();
+		Model model = mb.end();
 
-		modelBuilder.begin();
-		modelBuilder.part("globeMesh", globeMesh, GL20.GL_TRIANGLES,
-				new Material(ColorAttribute.createDiffuse(Color.MAGENTA)));
-		globeModel = modelBuilder.end();
-		instances.add(new ModelInstance(globeModel));
+		instances.add(new ModelInstance(model));
+
 		loading = false;
+
 	}
 
 	// ----- GAME LOOPS-----
