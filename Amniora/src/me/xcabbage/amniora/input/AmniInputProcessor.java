@@ -99,7 +99,7 @@ public class AmniInputProcessor implements InputProcessor {
 			System.out.println("Initializing Play");
 
 			game.setScreen(new GameplayScreen(game));
-			game.currentScreen = 1;
+			game.currentScreen = 2;
 			game.mainMenuScreen.dispose();
 
 			break;
@@ -173,7 +173,7 @@ public class AmniInputProcessor implements InputProcessor {
 	public void resolveButtons(int screenX, int screenY) {
 
 		try {
-			if (game.currentScreen == 0) {
+			if (game.currentScreen == 1) {
 				for (int a = 0; a < 4; a++) {
 					if (hoveringOverButton(a, screenX, screenY)
 							|| a == ((MainMenuScreen) activeScreen).activeButton) {
@@ -195,25 +195,29 @@ public class AmniInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		try {
 
-			MainMenuScreen activeScreen = (MainMenuScreen) this.activeScreen;
-			if (activeScreen.activeButton == -1) {
-				activeScreen.activeButton = 0;
-				return true;
-			} else if (activeScreen.activeButton == activeScreen.buttonCount - 1
-					&& amount == 1)
-				activeScreen.activeButton = 0;
-			else if (activeScreen.activeButton == 0 && amount == -1)
-				activeScreen.activeButton = activeScreen.buttonCount - 1;
-			else {
-				activeScreen.activeButton = activeScreen.activeButton + amount;
-				return true;
+		if (game.currentScreen == 1) {
+			try {
 
+				MainMenuScreen activeScreen = (MainMenuScreen) this.activeScreen;
+				if (activeScreen.activeButton == -1) {
+					activeScreen.activeButton = 0;
+					return true;
+				} else if (activeScreen.activeButton == activeScreen.buttonCount - 1
+						&& amount == 1)
+					activeScreen.activeButton = 0;
+				else if (activeScreen.activeButton == 0 && amount == -1)
+					activeScreen.activeButton = activeScreen.buttonCount - 1;
+				else {
+					activeScreen.activeButton = activeScreen.activeButton
+							+ amount;
+					return true;
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 		return false;
 	}

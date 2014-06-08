@@ -38,7 +38,6 @@ public class GameAmn extends Game {
 		gameplayScreen = new GameplayScreen(this);
 		standardProcessor.activeScreen = mainMenuScreen;
 		setScreen(mainMenuScreen);
-		currentScreen = 0;
 
 	}
 

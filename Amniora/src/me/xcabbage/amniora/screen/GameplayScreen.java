@@ -74,10 +74,13 @@ public class GameplayScreen implements Screen {
 	public Vector3[] sphereVect;
 	public Color[] pointColor;
 	ModelInstance globeInstance;
+	GameAmn game;
 
 	// LOADING - CREATION
 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
+
+		game = gam;
 
 		modelBatch = new ModelBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -421,6 +424,7 @@ public class GameplayScreen implements Screen {
 
 		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
 		updateGame();
+
 	}
 
 	// UTILITY
@@ -480,6 +484,7 @@ public class GameplayScreen implements Screen {
 	@Override
 	public void show() {
 		Gdx.input.setInputProcessor(multiplexer);
+
 	}
 
 	@Override

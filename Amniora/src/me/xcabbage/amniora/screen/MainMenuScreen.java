@@ -53,7 +53,8 @@ public class MainMenuScreen implements Screen {
 		game = gam;
 		float w = Gdx.graphics.getWidth();
 		float h = Gdx.graphics.getHeight();
-
+		System.out.println("setting current screen to 1");
+		game.currentScreen = 1;
 		// Camera & Batch work
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
