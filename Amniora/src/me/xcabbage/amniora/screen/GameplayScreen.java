@@ -73,6 +73,7 @@ public class GameplayScreen implements Screen {
 	public Vector2[] xzVect;
 	public Vector3[] sphereVect;
 	public Color[] pointColor;
+	ModelInstance globeInstance;
 
 	// LOADING - CREATION
 	public GameplayScreen(final GameAmn gam) {
@@ -195,7 +196,6 @@ public class GameplayScreen implements Screen {
 
 	}
 
-	@SuppressWarnings({ "static-access", "deprecation" })
 	public void doneLoading() {
 
 		// PLANET
@@ -261,10 +261,6 @@ public class GameplayScreen implements Screen {
 
 		/* xoppa's method */
 
-		Vector3 v, tempV;
-		ModelBuilder mb = new ModelBuilder();
-		mb.begin();
-
 		/* triangles */
 
 		// MeshPartBuilder builder = mb.part("name", GL20.GL_TRIANGLES,
@@ -294,27 +290,73 @@ public class GameplayScreen implements Screen {
 		 * null); builder.index(index); }
 		 */
 		Geometry ico = new Geometry();
+		Vector3 v, tempV;
+		ModelBuilder mb = new ModelBuilder();
+		mb.begin();
 
-		MeshPartBuilder builder = mb.part("name", GL20.GL_TRIANGLES,
-				Usage.Position,
-				new Material(ColorAttribute.createDiffuse(Color.BLUE)));
+		// Create mesh nodes
 		for (int a = 0; a < ico.vertices.length; a = a + 9) {
+
+			MeshPartBuilder builder = mb
+					.part("v" + a,
+							GL20.GL_TRIANGLES,
+							Usage.Position,
+							new Material(ColorAttribute
+									.createDiffuse(Color.LIGHT_GRAY)));
 			Vector3 v1 = new Vector3(ico.vertices[a], ico.vertices[a + 1],
 					ico.vertices[a + 2]);
 			Vector3 v2 = new Vector3(ico.vertices[a + 3], ico.vertices[a + 4],
 					ico.vertices[a + 5]);
 			Vector3 v3 = new Vector3(ico.vertices[a + 6], ico.vertices[a + 7],
 					ico.vertices[a + 8]);
+
 			builder.triangle(v1, v2, v3);
 			final short index1 = builder.vertex(v1, null, null, null);
 			final short index2 = builder.vertex(v2, null, null, null);
 			final short index3 = builder.vertex(v3, null, null, null);
 			builder.index(index1, index2, index3);
+
 		}
 
 		Model model = mb.end();
+		System.out.println(model.meshParts.size + " nodes registered.");
+		globeInstance = new ModelInstance(model);
+		instances.add(globeInstance);
 
-		instances.add(new ModelInstance(model));
+		// Color nodes
+		Color col;
+		for (int a = 0; a < globeInstance.model.meshParts.size; a++) {
+			try {
+
+				Material mate = globeInstance.materials.get(a);
+
+				switch (a % 6) {
+				case 1:
+					col = Color.RED;
+					break;
+				case 2:
+					col = Color.CYAN;
+					break;
+				case 3:
+					col = Color.YELLOW;
+					break;
+				case 4:
+					col = Color.BLUE;
+					break;
+				case 5:
+					col = Color.WHITE;
+					break;
+				default:
+					col = Color.ORANGE;
+					break;
+				}
+				mate.set(ColorAttribute.createDiffuse(col));
+				System.out.println("Assigning " + a);
+			} catch (Exception e) {
+				System.out.println("Can't assign color to mat number " + a);
+			}
+
+		}
 
 		loading = false;
 
