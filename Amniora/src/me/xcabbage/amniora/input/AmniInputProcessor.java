@@ -80,7 +80,8 @@ public class AmniInputProcessor implements InputProcessor {
 			scrolled(1);
 			break;
 		case 'r':
-			((GameplayScreen) game.getScreen()).updateGame();
+			if (game.currentScreen == 2)
+				((GameplayScreen) game.getScreen()).updateGame();
 		case ' ':
 			try {
 				buttonClicked(((MainMenuScreen) activeScreen).activeButton);

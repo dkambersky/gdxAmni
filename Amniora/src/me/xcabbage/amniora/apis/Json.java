@@ -42,7 +42,7 @@ public class Json {
 
 	public String getLevel() {
 		try {
-			return String.valueOf(api.getSummonerMethod()
+			return String.valueOf(api.getSummonerApiMethod()
 					.getSummonerByName(Region.EUNE, profile.getName())
 					.getSummonerLevel());
 		} catch (RiotApiException e) {
@@ -56,6 +56,7 @@ public class Json {
 
 		try {
 			profile = api.getSummoner(region, name);
+			System.out.println("Summoner successfully retrieved");
 			return true;
 		} catch (RiotApiException e) {
 
@@ -70,7 +71,7 @@ public class Json {
 
 	public void dump() {
 		try {
-			System.out.println(api.getStatsMethod().getStatSummaries(
+			System.out.println(api.getStatsApiMethod().getStatSummaries(
 					profile.getRegion(), profile.getId(), Season.SEASON_4));
 		} catch (RiotApiException e) {
 			// TODO Auto-generated catch block
