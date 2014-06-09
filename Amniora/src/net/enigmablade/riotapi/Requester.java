@@ -2,9 +2,10 @@ package net.enigmablade.riotapi;
 
 import java.io.*;
 import java.net.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
-import javax.net.ssl.*;
+import java.util.zip.*;
 import net.enigmablade.jsonic.*;
 import net.enigmablade.riotapi.util.*;
 
@@ -16,10 +17,20 @@ import net.enigmablade.riotapi.util.*;
 public class Requester
 {
 	public static final String HTTP_PROTOCOL = "http", HTTPS_PROTOCOL = "https";
+	public static final String GET_METHOD = "GET", POST_METHOD = "POST";
+	public static final String GZIP_ENCODING = "gzip", DEFLATE_ENCODING = "deflate", GZIP_DEFLATE_ENCODING = GZIP_ENCODING+","+DEFLATE_ENCODING, DEFAULT_ENCODING = null;
+	public static final Map<String, String> DEFAULT_HEADERS;
+	
+	static
+	{
+		DEFAULT_HEADERS = new HashMap<>();
+		DEFAULT_HEADERS.put("Accept-Charset", "UTF-8");
+	}
 	
 	//Options
 	private String userAgent;
-	private String protocol;
+	private String protocol, method, encoding;
+	private Map<String, String> headers;
 	
 	//Rate limiting
 	private boolean limiterEnabled = true;
@@ -58,13 +69,29 @@ public class Requester
 	 */
 	public Requester(String protocol, String userAgent, int limitPer10Seconds, int limitPer10Minutes)
 	{
+		this(protocol, GET_METHOD, userAgent, limitPer10Seconds, limitPer10Minutes);
+	}
+	
+	/**
+	 * Create a new Requester with the given user agent and rate limits.
+	 * @param protocol The HTTP protocol to use.
+	 * @param method The HTTP method to use.
+	 * @param userAgent The user agent for HTTP requests.
+	 * @param limitPer10Seconds The limit for the number of requests per 10 seconds. Must be greater than 0.
+	 * @param limitPer10Minutes The limit for the number of requests per 10 minutes. Must be greater than 0.
+	 * @throws IllegalArgumentException If one of the arguments is not valid.
+	 */
+	public Requester(String protocol, String method, String userAgent, int limitPer10Seconds, int limitPer10Minutes)
+	{
 		if(!HTTP_PROTOCOL.equals(protocol) && !HTTPS_PROTOCOL.equals(protocol))
 			throw new IllegalArgumentException("A valid protocol must be specified.");
-		if(limitPer10Seconds <= 0 || limitPer10Minutes <= 0)
-			throw new IllegalArgumentException("Rate limits must be greater than 0.");
 		
 		this.protocol = protocol;
+		setMethod(method);
 		setUserAgent(userAgent);
+		setHeaders(DEFAULT_HEADERS);
+		setEncoding(DEFAULT_ENCODING);
+		
 		setLimitPer10Seconds(limitPer10Seconds);
 		setLimitPer10Minutes(limitPer10Minutes);
 		
@@ -137,8 +164,19 @@ public class Requester
 	 */
 	public synchronized Response request(String requestUrl)
 	{
-		//return request(requestUrl, null);
-		return requestHelper(requestUrl);
+		return request(requestUrl, null);
+	}
+	
+	/**
+	 * Sends a request to the server at the given URL with an optional request body and returns the response.
+	 * @param requestUrl The request URL.
+	 * @param requestBody The optional request body.
+	 * @return The response from the request.
+	 * @throws IOException If there was an error when sending the request.
+	 */
+	public synchronized Response request(String requestUrl, String requestBody)
+	{
+		return requestHelper(requestUrl, requestBody);
 	}
 	
 	/**
@@ -171,7 +209,7 @@ public class Requester
 		}
 	}*/
 	
-	private Response requestHelper(String requestUrl)
+	private Response requestHelper(String requestUrl, String requestBody)
 	{
 		Response response;
 		
@@ -185,7 +223,7 @@ public class Requester
 		}
 		
 		//Otherwise send the request
-		response = sendLimitedRequest(requestUrl);
+		response = sendLimitedRequest(requestUrl, requestBody);
 		if(response.getValue() != null)
 		{
 			//Parse the request
@@ -208,35 +246,53 @@ public class Requester
 	
 	//Private utilities
 	
-	private Response sendRequest(String requestUrl)
+	private Response sendRequest(String requestUrl, String requestBody)
 	{
+		HttpURLConnection connection = null;
 		try
 		{
 			//Create and connect
 			URL url = new URL(requestUrl);
-			HttpsURLConnection connection = (HttpsURLConnection)url.openConnection();
-			connection.setRequestMethod("GET");
-			connection.setRequestProperty("Accept-Charset", "UTF-8");
+			connection = (HttpURLConnection)url.openConnection();
+			connection.setRequestMethod(method);
 			if(userAgent != null)
 				connection.setRequestProperty("User-Agent", userAgent);
-			connection.connect();
+			for(String headerKey : headers.keySet())
+				connection.setRequestProperty(headerKey, headers.get(headerKey));
 			
-			//Check response code and return if error
+			//Send body if present
+			if(requestBody != null)
+			{
+				connection.setDoOutput(true);
+				connection.setRequestProperty("Content-Length", String.valueOf(requestBody.length()));
+				
+				try(OutputStream out = connection.getOutputStream())
+				{
+					out.write(requestBody.getBytes(StandardCharsets.UTF_8));
+				}
+			}
+			
+			//Check response code and get appropriate input stream
+			InputStream in;
+			
 			int responseCode = connection.getResponseCode();
 			if(responseCode >= 300)
-				return new Response(null, responseCode);
+				in = connection.getErrorStream();
+			else
+				in = connection.getInputStream();
+			
+			//Check for optional encoding
+			String responseEncoding = connection.getHeaderField("Content-Encoding");
+			if(GZIP_ENCODING.equalsIgnoreCase(responseEncoding))
+				in = new GZIPInputStream(in);
+			else if(DEFLATE_ENCODING.equalsIgnoreCase(responseEncoding))
+				in = new InflaterInputStream(in, new Inflater(true));
+			else if(responseEncoding != null)
+				System.err.println("Unknown HTTP encoding \""+responseEncoding+"\"");
 			
 			//Get response
-			String responseText;
-			try(InputStream in = connection.getInputStream())
-			{
-				responseText = IOUtil.readInputStreamFully(in);
-			}
-			Response response = new Response(responseText, responseCode);
-			
-			connection.disconnect();
-			
-			return response;
+			String responseText = IOUtil.readInputStreamFully(in);
+			return new Response(responseText, responseCode);
 		}
 		catch(IOException e)
 		{
@@ -244,9 +300,14 @@ public class Requester
 			e.printStackTrace();
 			return new Response(null, -1);
 		}
+		finally
+		{
+			if(connection != null)
+				connection.disconnect();
+		}
 	}
 	
-	private Response sendLimitedRequest(String requestUrl)
+	private Response sendLimitedRequest(String requestUrl, String requestBody)
 	{
 		//Lock to prevent multiple requests from executing at once
 		rateLock.lock();
@@ -265,7 +326,7 @@ public class Requester
 			}
 			
 			//Send request
-			Response response = sendRequest(requestUrl);
+			Response response = sendRequest(requestUrl, requestBody);
 			lastCall = System.currentTimeMillis();
 			
 			//Manage request queue
@@ -301,7 +362,9 @@ public class Requester
 	
 	public synchronized void setLimitPer10Seconds(int limitPer10Seconds)
 	{
-		limitWait = 10000/(this.limitPer10Seconds = limitPer10Seconds);
+		if(limitPer10Seconds < 0)
+			throw new IllegalArgumentException("Rate limits must be greater than or equal to 0.");
+		limitWait = limitPer10Seconds == 0 ? 0 : 10000/(this.limitPer10Seconds = limitPer10Seconds);
 	}
 	
 	public synchronized int getLimitPer10Minutes()
@@ -311,6 +374,9 @@ public class Requester
 	
 	public synchronized void setLimitPer10Minutes(int limitPer10Minutes)
 	{
+		if(limitPer10Minutes < 0)
+			throw new IllegalArgumentException("Rate limits must be greater than or equal to 0.");
+		
 		this.limitPer10Minutes = limitPer10Minutes;
 	}
 	
@@ -327,6 +393,47 @@ public class Requester
 	public String getProtocol()
 	{
 		return protocol;
+	}
+	
+	public synchronized String getMethod()
+	{
+		return method;
+	}
+	
+	public synchronized void setMethod(String method)
+	{
+		if(!GET_METHOD.equals(method) && !POST_METHOD.equals(method))
+			throw new IllegalArgumentException("A valid method must be specified.");
+		
+		this.method = method;
+	}
+	
+	public synchronized String getEncoding()
+	{
+		return encoding;
+	}
+	
+	public synchronized void setEncoding(String encoding)
+	{
+		if(encoding != null && !GZIP_ENCODING.equals(encoding) && !DEFLATE_ENCODING.equals(encoding) && !GZIP_DEFLATE_ENCODING.equals(encoding))
+			throw new IllegalArgumentException("A valid encoding must be specified (or null for no encoding).");
+		
+		this.encoding = encoding;
+		
+		if(encoding != null)
+			headers.put("Accept-Encoding", encoding);
+		else
+			headers.remove("Accept-Encoding");
+	}
+	
+	public synchronized Map<String, String> getHeaders()
+	{
+		return headers;
+	}
+	
+	public synchronized void setHeaders(Map<String, String> headers)
+	{
+		this.headers = headers;
 	}
 	
 	public synchronized int getRequestsInPast10Seconds()
@@ -380,11 +487,19 @@ public class Requester
 		lastCall = 0;
 	}
 	
+	/**
+	 * Sets whether or not request responses should be cached.
+	 * @param enabled Whether or not caching is enabled.
+	 */
 	public synchronized void setCacheEnabled(boolean enabled)
 	{
 		cacheEnabled = enabled;
 	}
 	
+	/**
+	 * Returns whether or not request responses are cached.
+	 * @return <code>true</code> if requests responses are cached, otherwise <code>false</code>.
+	 */
 	public synchronized boolean isCacheEnabled()
 	{
 		return cacheEnabled;

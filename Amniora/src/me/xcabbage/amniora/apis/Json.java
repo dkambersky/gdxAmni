@@ -15,7 +15,7 @@ public class Json {
 	 * API
 	 */
 	public final String adress = "https://prod.api.pvp.net/api/";
-	public final String apiKey = "9407a2da-aac3-4240-8ce5-e1758ee4bb1d";
+	public final String apiKey = "4b485ad8-8bcd-4646-9947-1bf95481a03f";
 	RiotApi api;
 	Summoner profile;
 

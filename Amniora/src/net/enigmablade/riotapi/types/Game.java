@@ -1,6 +1,7 @@
 package net.enigmablade.riotapi.types;
 
 import java.util.*;
+import net.enigmablade.riotapi.*;
 import net.enigmablade.riotapi.constants.*;
 
 /**
@@ -12,6 +13,9 @@ import net.enigmablade.riotapi.constants.*;
  */
 public class Game implements Comparable<Game>
 {
+	private RiotApi api;
+	private Region region;
+	
 	private int championId;				//championId
 	private int level;					//level
 	private int spell1, spell2;			//spell1, spell2
@@ -29,8 +33,11 @@ public class Game implements Comparable<Game>
 	private List<Player> players;		//fellowPlayers
 	private Map<String, Object> stats;	//statistics
 	
-	public Game(int championId, int level, int spell1, int spell2, long playedDate, boolean invalid, long gameId, String gameMode, String gameType, String gameSubType, int mapId, int teamId, List<Player> players, Map<String, Object> stats)
+	public Game(RiotApi api, Region region, int championId, int level, int spell1, int spell2, long playedDate, boolean invalid, long gameId, String gameMode, String gameType, String gameSubType, int mapId, int teamId, List<Player> players, Map<String, Object> stats)
 	{
+		this.api = api;
+		this.region = region;
+		
 		this.championId = championId;
 		this.level = level;
 		this.spell1 = spell1;
@@ -49,20 +56,25 @@ public class Game implements Comparable<Game>
 	
 	//Accessor methods
 	
+	public Region getRegion()
+	{
+		return region;
+	}
+	
 	/**
-	 * Returns the ID of the champion played by the target summoner of the request.
+	 * Returns the champion played by the target summoner of the request.
 	 * @return The played champion ID.
 	 */
-	public int getChampionId()
+	public Champion getChampion()
 	{
-		return championId;
+		return new Champion(api, region, championId);
 	}
 	
 	/**
 	 * Returns the level of the target summoner of the request.
 	 * @return The summoner level.
 	 */
-	public int getLevel()
+	public int getSummonerLevel()
 	{
 		return level;
 	}
@@ -77,7 +89,7 @@ public class Game implements Comparable<Game>
 	}
 	
 	/**
-	 * Returns the second summoner spell used by the target summmoner of the request.
+	 * Returns the second summoner spell used by the target summoner of the request.
 	 * @return The second summoner spell.
 	 */
 	public int getSpell2()
@@ -196,6 +208,11 @@ public class Game implements Comparable<Game>
 		return 0;
 	}
 	
+	public int getLevel()
+	{
+		return getIntStat("level");
+	}
+	
 	public int getAssists()
 	{
 		return getIntStat("assists");
@@ -257,12 +274,8 @@ public class Game implements Comparable<Game>
 		int item;
 		for(int n = 0; n < 7; n++)
 		{
-			System.out.println("item"+n);
 			if((item = getIntStat("item"+n)) > 0)
-			{
-				System.out.println("\t"+item);
 				items.add(item);
-			}
 		}
 		return items;
 	}
@@ -596,6 +609,12 @@ public class Game implements Comparable<Game>
 		if(o == null || !(o instanceof Game))
 			return false;
 		return gameId == ((Game)o).gameId;
+	}
+	
+	@Override
+	public int hashCode()
+	{
+		return (int)gameId;
 	}
 	
 	@Override
