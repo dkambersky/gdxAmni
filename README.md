@@ -11,8 +11,8 @@ Concept:
 ----------
 
 - a RTS-esque game on a planet
-- build structures, armies, expand your territory
+- build structures, armies, expand your territory [Soon™ :D]
 - should involve techtrees
-- hopefully once multiplayer
+- hopefully once multiplayer [June: HA. HA. HA. HA]
 
 Written in Java; implementing LibGDX & TheEnigmaBlade's Roit API
