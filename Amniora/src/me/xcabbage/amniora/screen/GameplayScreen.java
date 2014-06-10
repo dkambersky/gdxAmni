@@ -47,7 +47,7 @@ import com.badlogic.gdx.utils.Array;
 public class GameplayScreen implements Screen {
 
 	private static final int VECTOR_COUNT = 100;
-	private static final float SQUARE_SIDE = 100;
+	private static float SQUARE_SIDE = 100;
 	private static final float ORBIT_SCALE = 4;
 	private static final int VECTORS_SQRT = 10;
 	private static final float SPHERE_SCALE = 0.6f;
@@ -75,6 +75,8 @@ public class GameplayScreen implements Screen {
 	public Color[] pointColor;
 	ModelInstance globeInstance;
 	GameAmn game;
+
+	Color[] col1 = new Color[6];
 
 	// LOADING - CREATION
 	public GameplayScreen(final GameAmn gam) {
@@ -508,4 +510,56 @@ public class GameplayScreen implements Screen {
 		texture.dispose();
 	}
 
+	public void reassignColors() {
+
+		for (int a = 0; a < 6; a++) {
+			float rA = (float) (Math.random() * 255);
+			float gA = (float) (Math.random() * 255);
+			float bA = (float) (Math.random() * 255);
+			col1[a] = new Color(rA, gA, bA, 1f);
+			col1[a].b = bA;
+			col1[a].r = rA;
+			col1[a].g = gA;
+			System.out.println("randomizing " + a + " " + rA + "," + col1[a].g
+					+ "," + bA);
+
+		}
+
+		for (int a = 0; a < globeInstance.model.meshParts.size; a++) {
+			try {
+				SQUARE_SIDE = 1;
+				Color col = Color.BLUE;
+				Material mate = globeInstance.materials.get(a);
+
+				switch (a % 6) {
+				case 1:
+					col = col1[0];
+					break;
+				case 2:
+					col = col1[1];
+					break;
+				case 3:
+					col = col1[2];
+					break;
+				case 4:
+					col = col1[3];
+					break;
+				case 5:
+					col = col1[4];
+					break;
+				default:
+					col = col1[5];
+					break;
+				}
+				mate.set(ColorAttribute.createDiffuse(Color.BLUE);
+
+				System.out.println("Assigning " + col.r + "," + col.g + ","
+						+ col.b);
+			} catch (Exception e) {
+				System.out.println("Can't assign color to mat number " + a);
+			}
+
+		}
+		System.out.println("Colors randomized");
+	}
 }

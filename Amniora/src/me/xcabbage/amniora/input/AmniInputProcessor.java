@@ -82,6 +82,14 @@ public class AmniInputProcessor implements InputProcessor {
 		case 'r':
 			if (game.currentScreen == 2)
 				((GameplayScreen) game.getScreen()).updateGame();
+
+		case 'n':
+			try {
+				((GameplayScreen) game.getScreen()).reassignColors();
+			} catch (Exception e) {
+				;
+			}
+			break;
 		case ' ':
 			try {
 				buttonClicked(((MainMenuScreen) activeScreen).activeButton);
