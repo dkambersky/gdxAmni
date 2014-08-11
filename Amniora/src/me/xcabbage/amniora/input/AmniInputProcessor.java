@@ -106,7 +106,6 @@ public class AmniInputProcessor implements InputProcessor {
 		switch (button) {
 		case 0:
 			System.out.println("Initializing Play");
-
 			game.setScreen(new GameplayScreen(game));
 			game.currentScreen = 2;
 			game.mainMenuScreen.dispose();

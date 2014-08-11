@@ -551,7 +551,7 @@ public class GameplayScreen implements Screen {
 					col = col1[5];
 					break;
 				}
-				mate.set(ColorAttribute.createDiffuse(Color.BLUE);
+				mate.set(ColorAttribute.createDiffuse(Color.BLUE));
 
 				System.out.println("Assigning " + col.r + "," + col.g + ","
 						+ col.b);
