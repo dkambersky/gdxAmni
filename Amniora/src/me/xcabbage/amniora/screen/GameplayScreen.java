@@ -51,6 +51,7 @@ public class GameplayScreen implements Screen {
 	private static final float ORBIT_SCALE = 4;
 	private static final int VECTORS_SQRT = 10;
 	private static final float SPHERE_SCALE = 0.6f;
+	private static final boolean gradualColoring = true;
 
 	private PerspectiveCamera camera;
 	private SpriteBatch batch;
@@ -334,26 +335,38 @@ public class GameplayScreen implements Screen {
 			try {
 
 				Material mate = globeInstance.materials.get(a);
-
-				switch (a % 6) {
-				case 1:
-					col = Color.RED;
-					break;
-				case 2:
-					col = Color.CYAN;
-					break;
-				case 3:
-					col = Color.YELLOW;
-					break;
-				case 4:
-					col = Color.BLUE;
-					break;
-				case 5:
-					col = Color.WHITE;
-					break;
-				default:
-					col = Color.ORANGE;
-					break;
+				if (!gradualColoring) {
+					switch (a % 6) {
+					case 1:
+						col = Color.RED;
+						break;
+					case 2:
+						col = Color.CYAN;
+						break;
+					case 3:
+						col = Color.YELLOW;
+						break;
+					case 4:
+						col = Color.BLUE;
+						break;
+					case 5:
+						col = Color.WHITE;
+						break;
+					default:
+						col = Color.ORANGE;
+						break;
+					}
+				} else {
+					col = Color.ORANGE.cpy();
+					System.out.println(a + "....");
+					System.out.println("orig: " + col);
+					float rNew = (float) a / 80;
+					System.out.println(a + " / 80");
+					System.out.println((float) a / 80 + " | " + (float) a / 80
+							+ " | " + (float) a / 80 + " | " + 1f);
+//					col.set((float) a /80, (float) a / 80, (float) a / 80, 1f);
+					col.set(0, 0, (float) a / 80, 1f);
+					System.out.println("new: " + col);
 				}
 				mate.set(ColorAttribute.createDiffuse(col));
 				System.out.println("Assigning " + a);

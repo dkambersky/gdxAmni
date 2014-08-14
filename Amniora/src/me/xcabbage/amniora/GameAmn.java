@@ -17,6 +17,7 @@ public class GameAmn extends Game {
 	public int currentScreen = -1;
 	public AmniInputProcessor standardProcessor;
 	public Json json;
+	public static GameInstance inst;
 
 	@Override
 	public void create() {
