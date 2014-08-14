@@ -63,4 +63,14 @@ public class GameAmn extends Game {
 	@Override
 	public void resume() {
 	}
+
+	/**
+	 * @param string
+	 */
+	public static void error(String string) {
+		
+		//TODO error pop-up? fluff?
+		System.out.println(string);
+
+	}
 }
