@@ -1,4 +1,4 @@
-/** The Type.java class responsible for 
+/** The Type.java enum where the different tile types of the game are defined and tweaked.  
  *
  * @author xCabbage [github.com/xcabbage]
  *
@@ -8,10 +8,95 @@
 
 package me.xcabbage.amniora.nonstatic;
 
+import me.xcabbage.amniora.GameAmn;
+
 /**
  * @author David
- *
+ * 
  */
 public enum Type {
 
+	// Normal tiles w/ added starter tiles
+	idk();
+	// Special tiles
+
+	// Unique tiles
+
+	final int captureTime;
+	final StructureType structure;
+	final String name;
+
+	// unused functionality - render images
+	final String RelPath = "resources/";
+	String image = "";
+
+	Type() {
+		name = "Base tile";
+		structure = StructureType.NONE;
+		captureTime = 20;
+
+		// unused - render
+		this.image = RelPath.concat(image).concat(".png");
+
+	}
+
+	Type(int starterTypeLevel) {
+		if (starterTypeLevel == 1) {
+			name = "Starter tile I";
+			captureTime = 10;
+		} else if (starterTypeLevel == 2) {
+			name = "Starter tile II";
+			captureTime = 15;
+		} else {
+			// if invalid parameter supplied, create a retarded tile
+			GameAmn.error("Invalid tile type supplied: " + starterTypeLevel);
+			name = "Magical tile of Retardedness";
+			captureTime = 20;
+		}
+
+		structure = StructureType.NONE;
+
+		// unused - render
+		this.image = RelPath.concat(image).concat(".png");
+
+	}
+
+	Type(StructureType type) {
+		captureTime = 20;
+		structure = type;
+		switch (type) {
+		// Uniques:
+		case FAR_SIGHT_PLANES:
+			name = "Planes of Far Sight";
+			break;
+		case EXCAVATION_TECH_LAB:
+			name = "Excavation tech lab";
+			break;
+		case VANGUARD_SHRINE:
+			name = "Shrine of the Vanguard";
+			break;
+		case RAIDER_SHRINE:
+			name = "Shrine of the Raider";
+			break;
+
+		// Specials:
+		case COMBAT_TEMPLE:
+			name = "Combat temple";
+			break;
+
+		case RICH_EARTH:
+			name = "Rich earth";
+			break;
+
+		default:
+			// if invalid parameter supplied, create a retarded tile
+			GameAmn.error("Invalid tile type supplied: " + type);
+			name = "Magical tile of Retardedness";
+
+		}
+
+		// unused - render
+		this.image = RelPath.concat(image).concat(".png");
+
+	}
 }
