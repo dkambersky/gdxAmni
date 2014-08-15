@@ -17,11 +17,18 @@ import me.xcabbage.amniora.GameAmn;
 public enum Type {
 
 	// Normal tiles w/ added starter tiles
-	idk();
+	Normal(), Starter1(1), Starter2(2),
+	
 	// Special tiles
-
+	CombatTemple(StructureType.COMBAT_TEMPLE), RichEarth(StructureType.RICH_EARTH),
+	
 	// Unique tiles
-
+	FarsightPlanes(StructureType.FAR_SIGHT_PLANES), ExcavationLab(
+			StructureType.EXCAVATION_TECH_LAB), VanguardShrine(
+			StructureType.VANGUARD_SHRINE), RaiderShrine(
+			StructureType.RAIDER_SHRINE);
+	
+	
 	final int captureTime;
 	final StructureType structure;
 	final String name;
@@ -30,6 +37,7 @@ public enum Type {
 	final String RelPath = "resources/";
 	String image = "";
 
+	// normal tile
 	Type() {
 		name = "Base tile";
 		structure = StructureType.NONE;
@@ -40,6 +48,7 @@ public enum Type {
 
 	}
 
+	// starter sped-up tiles
 	Type(int starterTypeLevel) {
 		if (starterTypeLevel == 1) {
 			name = "Starter tile I";
@@ -61,6 +70,7 @@ public enum Type {
 
 	}
 
+	// special structures
 	Type(StructureType type) {
 		captureTime = 20;
 		structure = type;
