@@ -1,6 +1,7 @@
 package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
+import me.xcabbage.amniora.GameInstance;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.util.Geometry;
 
@@ -217,7 +218,7 @@ public class GameplayScreen implements Screen {
 
 		// SPHERES AROUND
 		Color color = Color.WHITE;
-
+GameInstance.initBattlefield();
 		for (int a = 0; a < 4; a++) {
 			ModelInstance ball = new ModelInstance(planet, 0, -15, -1
 					* (a * 10 + 10));

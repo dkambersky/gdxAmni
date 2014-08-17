@@ -30,8 +30,14 @@ public class Tile {
 	int armyFootman, armySamurai, armyReaver;
 
 	public Tile() {
+		this(Type.CombatTemple,State.EMPTY);
+	}
+	
+	
+	public Tile(Type type, State state) {
 		allegiance = 0;
 		type = Type.Normal;
 		state = State.EMPTY;
+		System.out.println("I'm a fucking tile lol." + type);
 	}
 }

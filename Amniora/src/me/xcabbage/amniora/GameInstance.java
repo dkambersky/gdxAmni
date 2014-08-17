@@ -12,13 +12,13 @@ import me.xcabbage.amniora.nonstatic.Tile;
 
 /**
  * @author David
- *
+ * 
  */
 public class GameInstance {
-public Tile[] tiles = new Tile[80];
+	public Tile[] tiles = new Tile[80];
 
-public void initBattlefield(){
-	
-}
-	
+	static public void initBattlefield() {
+		Tile tile = new Tile();
+	}
+
 }
