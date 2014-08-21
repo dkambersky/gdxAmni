@@ -9,7 +9,7 @@ public class Main {
 		cfg.title = "Amniora";
 		cfg.useGL20 = true;
 		cfg.width = 1024;
-		cfg.height = 690; 
+		cfg.height = 690;
 
 		new LwjglApplication(new GameAmn(), cfg);
 	}
