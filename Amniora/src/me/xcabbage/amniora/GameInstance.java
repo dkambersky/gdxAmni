@@ -8,6 +8,8 @@
 
 package me.xcabbage.amniora;
 
+import com.badlogic.gdx.graphics.Color;
+
 import me.xcabbage.amniora.nonstatic.Tile;
 
 /**
@@ -17,8 +19,11 @@ import me.xcabbage.amniora.nonstatic.Tile;
 public class GameInstance {
 	public Tile[] tiles = new Tile[80];
 
-	static public void initBattlefield() {
+	public void initBattlefield() {
 		Tile tile = new Tile();
 	}
+	public boolean setTileColor(Tile tile, Color c)  {
+		
+	} 
 
 }
