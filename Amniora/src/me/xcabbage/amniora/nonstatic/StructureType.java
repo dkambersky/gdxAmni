@@ -1,17 +1,14 @@
-/** The StructureType.java class responsible for 
- *
- * @author xCabbage [github.com/xcabbage]
- *
- * @info for the Amniora project [github.com/xcabbage/amniora]
- *      created 14. 8. 2014 18:35:50
- */
+
 
 package me.xcabbage.amniora.nonstatic;
 
-/**
- * @author David
- * 
- */
+/** The StructureType.java class which stores the different structure types (duh)	
+*
+* @author xCabbage [github.com/xcabbage]
+*
+* @info for the Amniora project [github.com/xcabbage/amniora]
+*      created 14. 8. 2014 18:35:50
+*/
 public enum StructureType {
 	// basic
 	NONE,

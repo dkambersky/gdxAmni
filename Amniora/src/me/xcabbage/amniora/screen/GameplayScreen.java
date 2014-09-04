@@ -218,7 +218,13 @@ public class GameplayScreen implements Screen {
 
 		// SPHERES AROUND
 		Color color = Color.WHITE;
-GameInstance.initBattlefield();
+		
+		
+		//Game data system
+		GameInstance instance = new GameInstance();
+		instance.initBattlefield();
+		
+		
 		for (int a = 0; a < 4; a++) {
 			ModelInstance ball = new ModelInstance(planet, 0, -15, -1
 					* (a * 10 + 10));
@@ -365,7 +371,8 @@ GameInstance.initBattlefield();
 					System.out.println(a + " / 80");
 					System.out.println((float) a / 80 + " | " + (float) a / 80
 							+ " | " + (float) a / 80 + " | " + 1f);
-//					col.set((float) a /80, (float) a / 80, (float) a / 80, 1f);
+					// col.set((float) a /80, (float) a / 80, (float) a / 80,
+					// 1f);
 					col.set(0, 0, (float) a / 80, 1f);
 					System.out.println("new: " + col);
 				}

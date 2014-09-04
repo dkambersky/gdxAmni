@@ -1,34 +1,32 @@
-/** The Type.java enum where the different tile types of the game are defined and tweaked.  
- *
- * @author xCabbage [github.com/xcabbage]
- *
- * @info for the Amniora project [github.com/xcabbage/amniora]
- *      created 14. 8. 2014 16:23:22
- */
+
 
 package me.xcabbage.amniora.nonstatic;
 
 import me.xcabbage.amniora.GameAmn;
 
-/**
- * @author David
- * 
- */
+/** The Type.java enum where the different tile types of the game are defined and tweaked.  
+*
+* @author xCabbage [github.com/xcabbage]
+*
+* @info for the Amniora project [github.com/xcabbage/amniora]
+*      created 14. 8. 2014 16:23:22
+*/
+
 public enum Type {
 
 	// Normal tiles w/ added starter tiles
 	Normal(), Starter1(1), Starter2(2),
-	
+
 	// Special tiles
-	CombatTemple(StructureType.COMBAT_TEMPLE), RichEarth(StructureType.RICH_EARTH),
-	
+	CombatTemple(StructureType.COMBAT_TEMPLE), RichEarth(
+			StructureType.RICH_EARTH),
+
 	// Unique tiles
 	FarsightPlanes(StructureType.FAR_SIGHT_PLANES), ExcavationLab(
 			StructureType.EXCAVATION_TECH_LAB), VanguardShrine(
 			StructureType.VANGUARD_SHRINE), RaiderShrine(
 			StructureType.RAIDER_SHRINE);
-	
-	
+
 	final int captureTime;
 	final StructureType structure;
 	final String name;
