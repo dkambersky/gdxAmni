@@ -1,17 +1,14 @@
-/** The Tile.java class from which individual tile objects are generated. 
- *  A Tile object holds the info for a single tile, parallel to the rendered faces of the icosahedron. 
- *
- * @author xCabbage [github.com/xcabbage]
- *
- * @info for the Amniora project [github.com/xcabbage/amniora]
- *      created 14. 8. 2014 16:22:04
- */
-
 package me.xcabbage.amniora.nonstatic;
 
 /**
- * @author David
+ * The Tile.java class from which individual tile objects are generated. A Tile
+ * object holds the info for a single tile, parallel to the rendered faces of
+ * the icosahedron.
  * 
+ * @author xCabbage [github.com/xcabbage]
+ * 
+ * @info for the Amniora project [github.com/xcabbage/amniora] created 14. 8.
+ *       2014 16:22:04
  */
 public class Tile {
 

@@ -1,16 +1,16 @@
-
-
 package me.xcabbage.amniora.nonstatic;
 
 import me.xcabbage.amniora.GameAmn;
 
-/** The Type.java enum where the different tile types of the game are defined and tweaked.  
-*
-* @author xCabbage [github.com/xcabbage]
-*
-* @info for the Amniora project [github.com/xcabbage/amniora]
-*      created 14. 8. 2014 16:23:22
-*/
+/**
+ * The Type.java enum where the different tile types of the game are defined and
+ * tweaked.
+ * 
+ * @author xCabbage [github.com/xcabbage]
+ * 
+ * @info for the Amniora project [github.com/xcabbage/amniora] created 14. 8.
+ *       2014 16:23:22
+ */
 
 public enum Type {
 
