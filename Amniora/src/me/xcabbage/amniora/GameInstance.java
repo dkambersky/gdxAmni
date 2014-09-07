@@ -1,21 +1,34 @@
-
 package me.xcabbage.amniora;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.Material;
+import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 
 import me.xcabbage.amniora.nonstatic.State;
 import me.xcabbage.amniora.nonstatic.Tile;
 import me.xcabbage.amniora.nonstatic.Type;
+import me.xcabbage.amniora.screen.GameplayScreen;
 
-/** The GameInstance.java class responsible for keeping track of the current state of everything in the game.  
-*
-* @author xCabbage [github.com/xcabbage]
-*
-* @info for the Amniora project [github.com/xcabbage/amniora]
-*      created 14. 8. 2014 16:18:59
-*/
+/**
+ * The GameInstance.java class responsible for keeping track of the current
+ * state of everything in the game.
+ * 
+ * @author xCabbage [github.com/xcabbage]
+ * 
+ * @info for the Amniora project [github.com/xcabbage/amniora] created 14. 8.
+ *       2014 16:18:59
+ */
 
 public class GameInstance {
+
+	// Constructor to be able to reach our Game screen
+	GameplayScreen screen;
+
+	public GameInstance(GameplayScreen screen) {
+		this.screen = screen;
+		initBattlefield();
+	}
+
 	public Tile[] tiles = new Tile[80];
 
 	public void initBattlefield() {
@@ -45,7 +58,14 @@ public class GameInstance {
 	}
 
 	public boolean setTileColor(Tile tile, Color c) {
-		return false;
-	}
+		Material mat = screen.
+				globeInstance.
+				materials.
+				get(tile.position);
+		Color col = Color.ORANGE.cpy();
+		col.set(0, 0, (float) tile.position / 80, 1f);
+		mat.set(ColorAttribute.createDiffuse(col));
+		return true;
 
+	}
 }

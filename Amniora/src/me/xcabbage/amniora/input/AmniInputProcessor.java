@@ -1,6 +1,7 @@
 package me.xcabbage.amniora.input;
 
 import me.xcabbage.amniora.GameAmn;
+import me.xcabbage.amniora.GameInstance;
 import me.xcabbage.amniora.screen.GameplayScreen;
 import me.xcabbage.amniora.screen.MainMenuScreen;
 
@@ -10,6 +11,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 
 public class AmniInputProcessor implements InputProcessor {
@@ -95,6 +97,18 @@ public class AmniInputProcessor implements InputProcessor {
 				buttonClicked(((MainMenuScreen) activeScreen).activeButton);
 			} catch (Exception e) {
 				;
+			}
+			break;
+
+		case 'f':
+			try {
+				int rand = (int) (Math.random() * 80);
+				System.out.println(rand);
+				GameInstance instance = ((GameplayScreen) game.getScreen()).instance;
+				instance.setTileColor(instance.tiles[rand], Color.CYAN);
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 			break;
 		}
@@ -246,7 +260,7 @@ public class AmniInputProcessor implements InputProcessor {
 		} else if (direction == -1) {
 			cam.rotateAround(Vector3.Zero, new Vector3(0, 1, 0), -5f);
 		} else
-			System.out.println("Wrong parameter passed, nigga");
+			System.out.println("Wrong parameter passed. Try, try again.");
 		cam.update();
 
 	}

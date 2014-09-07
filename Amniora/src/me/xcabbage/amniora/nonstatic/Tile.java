@@ -12,6 +12,9 @@ package me.xcabbage.amniora.nonstatic;
  */
 public class Tile {
 
+	// The tile's position on the icosahedron.
+	public int position;
+
 	// The tile's allegiance to a side; 0 = neutral, 1 = blue, 2 = orange
 	int allegiance;
 

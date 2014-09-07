@@ -75,9 +75,10 @@ public class GameplayScreen implements Screen {
 	public Vector2[] xzVect;
 	public Vector3[] sphereVect;
 	public Color[] pointColor;
-	ModelInstance globeInstance;
-	GameAmn game;
-
+	public ModelInstance globeInstance;
+	public GameAmn game;		
+	public GameInstance instance;
+	
 	Color[] col1 = new Color[6];
 
 	// LOADING - CREATION
@@ -218,13 +219,11 @@ public class GameplayScreen implements Screen {
 
 		// SPHERES AROUND
 		Color color = Color.WHITE;
-		
-		
-		//Game data system
-		GameInstance instance = new GameInstance();
+
+		// Game data system
+		instance = new GameInstance(this);
 		instance.initBattlefield();
-		
-		
+
 		for (int a = 0; a < 4; a++) {
 			ModelInstance ball = new ModelInstance(planet, 0, -15, -1
 					* (a * 10 + 10));
