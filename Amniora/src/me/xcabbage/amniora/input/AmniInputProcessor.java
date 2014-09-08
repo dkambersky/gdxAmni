@@ -28,7 +28,6 @@ public class AmniInputProcessor implements InputProcessor {
 
 	public AmniInputProcessor(final GameAmn gam) {
 		game = gam;
-
 	}
 
 	@Override
@@ -102,7 +101,7 @@ public class AmniInputProcessor implements InputProcessor {
 
 		case 'f':
 			try {
-				
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

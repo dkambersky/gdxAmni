@@ -96,8 +96,8 @@ public class GameplayScreen implements Screen {
 		// g3dbect
 		camera = new PerspectiveCamera(67, w, h);
 
-		camera.position.set(5f, 0, 5f);
-		camera.lookAt(0, -1, 0);
+		camera.position.set(1.3f, 0, 1.3f);
+		camera.lookAt(0, 0, 0);
 		camera.near = 0.1f;
 		camera.far = 100f;
 

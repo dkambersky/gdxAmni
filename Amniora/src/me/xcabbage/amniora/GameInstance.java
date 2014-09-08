@@ -20,9 +20,10 @@ import me.xcabbage.amniora.screen.GameplayScreen;
  */
 
 public class GameInstance {
-
-	//
+	// DEBUG
+	// recolor madness
 	public boolean recolourInProgress;
+	int recolourPos;
 
 	// Constructor to be able to reach our Game screen
 	GameplayScreen screen;
@@ -77,17 +78,22 @@ public class GameInstance {
 	}
 
 	public boolean updateBattlefield() {
+
 		if (recolourInProgress) {
-			if ((int) Math.random() * 100 < 8) {
-				
+			if (recolourPos == 80)
+				recolourPos = 0;
+			if ((Math.random() * 100) < 4f) {
 
 				setTileColor(
-						tiles[(int) (Math.random() * 80)],
+						tiles[recolourPos],
 						Color.RED.cpy().set(((float) Math.random()),
 								((float) Math.random()),
 								((float) Math.random()), 1));
+				recolourPos++;
 			}
+
 		}
+
 		return true;
 	}
 }
