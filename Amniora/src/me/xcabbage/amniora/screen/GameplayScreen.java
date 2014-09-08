@@ -76,9 +76,9 @@ public class GameplayScreen implements Screen {
 	public Vector3[] sphereVect;
 	public Color[] pointColor;
 	public ModelInstance globeInstance;
-	public GameAmn game;		
+	public GameAmn game;
 	public GameInstance instance;
-	
+
 	Color[] col1 = new Color[6];
 
 	// LOADING - CREATION
@@ -392,6 +392,8 @@ public class GameplayScreen implements Screen {
 	// updates
 	public void updateGame() {
 		// orbitEverything();
+		try{
+		instance.updateBattlefield();} catch (Exception e){e.printStackTrace();}
 
 	}
 

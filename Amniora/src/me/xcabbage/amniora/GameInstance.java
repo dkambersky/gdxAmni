@@ -21,6 +21,9 @@ import me.xcabbage.amniora.screen.GameplayScreen;
 
 public class GameInstance {
 
+	//
+	public boolean recolourInProgress;
+
 	// Constructor to be able to reach our Game screen
 	GameplayScreen screen;
 
@@ -32,6 +35,7 @@ public class GameInstance {
 	public Tile[] tiles = new Tile[80];
 
 	public void initBattlefield() {
+		int b = 0;
 		for (Tile tile : tiles) {
 			int a = (int) (Math.random() * 5.0);
 			switch (a) {
@@ -51,21 +55,39 @@ public class GameInstance {
 				tile = new Tile(Type.VanguardShrine, State.EMPTY);
 				break;
 			}
+			tile.position = b;
+			tiles[b] = tile;
+
+			b++;
 
 			System.out.println(tile);
 		}
-
+		System.out.println("Battlefield initiated");
 	}
 
 	public boolean setTileColor(Tile tile, Color c) {
-		Material mat = screen.
-				globeInstance.
-				materials.
-				get(tile.position);
+		Material mat = screen.globeInstance.materials.get(tile.position);
 		Color col = Color.ORANGE.cpy();
-		col.set(0, 0, (float) tile.position / 80, 1f);
+		col.set(c);
+
+		System.out.println("setting " + tile.position + " | " + col);
 		mat.set(ColorAttribute.createDiffuse(col));
 		return true;
 
+	}
+
+	public boolean updateBattlefield() {
+		if (recolourInProgress) {
+			if ((int) Math.random() * 100 < 8) {
+				
+
+				setTileColor(
+						tiles[(int) (Math.random() * 80)],
+						Color.RED.cpy().set(((float) Math.random()),
+								((float) Math.random()),
+								((float) Math.random()), 1));
+			}
+		}
+		return true;
 	}
 }

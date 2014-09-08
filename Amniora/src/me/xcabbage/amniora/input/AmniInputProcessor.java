@@ -102,10 +102,15 @@ public class AmniInputProcessor implements InputProcessor {
 
 		case 'f':
 			try {
-				int rand = (int) (Math.random() * 80);
-				System.out.println(rand);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case 'g':
+			try {
 				GameInstance instance = ((GameplayScreen) game.getScreen()).instance;
-				instance.setTileColor(instance.tiles[rand], Color.CYAN);
+				instance.recolourInProgress = !instance.recolourInProgress;
 
 			} catch (Exception e) {
 				e.printStackTrace();
