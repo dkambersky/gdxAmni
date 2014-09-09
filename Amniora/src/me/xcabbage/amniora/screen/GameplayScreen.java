@@ -2,12 +2,14 @@ package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.GameInstance;
+import me.xcabbage.amniora.assets.Assets;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.util.Geometry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -21,6 +23,8 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -43,49 +47,96 @@ import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
+import com.badlogic.gdx.scenes.scene2d.Event;
+import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.Array;
 
 public class GameplayScreen implements Screen {
 
+	// // / Constants - to be tweaked when needed
 	private static final int VECTOR_COUNT = 100;
 	private static float SQUARE_SIDE = 100;
 	private static final float ORBIT_SCALE = 4;
 	private static final int VECTORS_SQRT = 10;
 	private static final float SPHERE_SCALE = 0.6f;
-	private static final boolean gradualColoring = true;
+	private static final boolean GRADUAL_COLORING = true;
+	private static final boolean CONSOLE_ENABLED = true;
 
+	// // / Screen logic
+	InputMultiplexer multiplexer, cMultiplexer;
+
+	public GameAmn game;
+	public GameInstance instance;
+	public boolean loading;
+	private boolean consoleShown;
+	public int width, height;
+	Stage stage;
+
+	// // / Graphical framework
 	private PerspectiveCamera camera;
-	private SpriteBatch batch;
-	private Texture texture;
-	private ModelBatch modelBatch;
+
 	private Environment environment;
 	private ShapeRenderer shapeRenderer;
 	public CameraInputController camController;
 	public AssetManager assets;
-	public Array<ModelInstance> instances = new Array<ModelInstance>();
-	public boolean loading;
-	public Mesh mesh;
-	public ModelInstance moving;
-	InputMultiplexer multiplexer;
-	Pixmap globeMap;
+
+	// // / Builders
 	ModelBuilder modelBuilder;
 	MeshBuilder meshBuilder;
+
+	// // / Graphical objects
+
+	// // 3D Render
+	public Array<ModelInstance> instances = new Array<ModelInstance>();
+	private Texture texture;
+	private ModelBatch modelBatch;
+	public Mesh mesh;
+	public ModelInstance moving;
+	Pixmap globeMap;
+
 	Mesh globeMesh;
 	Model globeModel;
+	public ModelInstance globeInstance;
+
+	Color[] col1 = new Color[6];
 	public Vector2[] xzVect;
 	public Vector3[] sphereVect;
 	public Color[] pointColor;
-	public ModelInstance globeInstance;
-	public GameAmn game;
-	public GameInstance instance;
 
-	Color[] col1 = new Color[6];
+	// // 2D Render
+	// / Batch
+	private SpriteBatch spriteBatch;
+	// / Fonts
+	BitmapFont F_debug, F_buttons, F_buttonsHighlight, F_buttonsOutline0,
+			F_buttonsOutline1, F_buttonsOutline2, F_buttonsOutline3;
 
-	// LOADING - CREATION
+	// / Console
+	Sprite console_sprite;
+	Texture console_texture;
+	TextField console_textfield;
+	String[] console_history = new String[6];
+	private TextFieldStyle console_textfield_style;
+	private InputProcessor console_processor;
+
+	// // / LOADING - CREATION
 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		game = gam;
+
+		// fonts
+
+		F_debug = Assets.F_debug;
+		F_buttons = Assets.F_buttons;
+		F_buttonsHighlight = Assets.F_buttonsHighlight;
+		F_buttonsOutline0 = Assets.F_buttonsOutline0;
+		F_buttonsOutline1 = Assets.F_buttonsOutline1;
+		F_buttonsOutline2 = Assets.F_buttonsOutline2;
+		F_buttonsOutline3 = Assets.F_buttonsOutline3;
 
 		modelBatch = new ModelBatch();
 		shapeRenderer = new ShapeRenderer();
@@ -205,6 +256,11 @@ public class GameplayScreen implements Screen {
 	}
 
 	public void doneLoading() {
+
+		// DEBUG
+		if (CONSOLE_ENABLED) {
+			createConsole();
+		}
 
 		// PLANET
 		Model planet = assets.get("data/planet_colors.g3db", Model.class);
@@ -341,7 +397,7 @@ public class GameplayScreen implements Screen {
 			try {
 
 				Material mate = globeInstance.materials.get(a);
-				if (!gradualColoring) {
+				if (!GRADUAL_COLORING) {
 					switch (a % 6) {
 					case 1:
 						col = Color.RED;
@@ -387,13 +443,41 @@ public class GameplayScreen implements Screen {
 
 	}
 
+	// // LOADING - DEBUG
+	// / console
+	void createConsole() {
+		stage = new Stage();
+		spriteBatch = new SpriteBatch();
+		console_texture = new Texture(Gdx.files.internal("data/console.png"));
+		console_sprite = new Sprite(console_texture);
+		console_sprite.setBounds(
+				Gdx.graphics.getWidth() - console_sprite.getWidth(),
+				Gdx.graphics.getHeight() - console_sprite.getHeight(),
+				console_sprite.getWidth(), console_sprite.getHeight());
+
+		console_textfield_style = new TextFieldStyle();
+		F_debug.scale(0.3f);
+		console_textfield_style.font = F_debug;
+		console_textfield_style.fontColor = Color.GREEN;
+		console_textfield = new TextField("Enter commands...",
+				console_textfield_style);
+		console_textfield.setBounds(
+				Gdx.graphics.getWidth() - console_sprite.getWidth() + 20,
+				Gdx.graphics.getHeight() - console_sprite.getHeight() - 50,
+				250, 50);
+
+	}
+
 	// ----- GAME LOOPS-----
 
 	// updates
 	public void updateGame() {
 		// orbitEverything();
-		try{
-		instance.updateBattlefield();} catch (Exception e){e.printStackTrace();}
+		try {
+			instance.updateBattlefield();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
@@ -449,6 +533,16 @@ public class GameplayScreen implements Screen {
 		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
 		updateGame();
 
+		// 2D Render
+		if (CONSOLE_ENABLED && !loading) {
+			spriteBatch.begin();
+			console_sprite.draw(spriteBatch);
+			console_textfield.draw(spriteBatch, 1f);
+
+			spriteBatch.end();
+
+		}
+
 	}
 
 	// UTILITY
@@ -502,7 +596,9 @@ public class GameplayScreen implements Screen {
 	/* unused methods */
 	@Override
 	public void resize(int width, int height) {
-
+		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
+		this.width = width;
+		this.height = height;
 	}
 
 	@Override
@@ -528,7 +624,7 @@ public class GameplayScreen implements Screen {
 
 	@Override
 	public void dispose() {
-		batch.dispose();
+		// TODO properly dispose of everything
 		texture.dispose();
 	}
 

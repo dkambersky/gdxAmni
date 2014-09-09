@@ -82,7 +82,7 @@ public class GameInstance {
 		if (recolourInProgress) {
 			if (recolourPos == 80)
 				recolourPos = 0;
-			if ((Math.random() * 100) < 4f) {
+			if ((Math.random() * 100) < 6f) {
 
 				setTileColor(
 						tiles[recolourPos],

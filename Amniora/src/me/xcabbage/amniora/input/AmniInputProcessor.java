@@ -18,6 +18,8 @@ public class AmniInputProcessor implements InputProcessor {
 	GameAmn game;
 	public Screen activeScreen;
 	public boolean rotating;
+	public boolean consoleEnabled, consoleActive;
+	
 	public int direction;
 	int buttonPixels[][] = { { 116, 290, 236, 320, }, { 160, 370, 302, 408, },
 
@@ -83,13 +85,6 @@ public class AmniInputProcessor implements InputProcessor {
 		case 'r':
 			if (game.currentScreen == 2)
 				((GameplayScreen) game.getScreen()).updateGame();
-
-		case 'n':
-			try {
-				((GameplayScreen) game.getScreen()).reassignColors();
-			} catch (Exception e) {
-				;
-			}
 			break;
 		case ' ':
 			try {
