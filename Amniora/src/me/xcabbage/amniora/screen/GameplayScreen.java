@@ -465,6 +465,7 @@ public class GameplayScreen implements Screen {
 				Gdx.graphics.getWidth() - console_sprite.getWidth() + 20,
 				Gdx.graphics.getHeight() - console_sprite.getHeight() - 50,
 				250, 50);
+		AmniInputProcessor.consoleEnabled = true;
 
 	}
 

@@ -18,8 +18,8 @@ public class AmniInputProcessor implements InputProcessor {
 	GameAmn game;
 	public Screen activeScreen;
 	public boolean rotating;
-	public boolean consoleEnabled, consoleActive;
-	
+	static public boolean consoleEnabled, consoleActive;
+
 	public int direction;
 	int buttonPixels[][] = { { 116, 290, 236, 320, }, { 160, 370, 302, 408, },
 
@@ -75,44 +75,48 @@ public class AmniInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		switch (character) {
-		case 'w':
-			scrolled(-1);
-			break;
-		case 's':
-			scrolled(1);
-			break;
-		case 'r':
-			if (game.currentScreen == 2)
-				((GameplayScreen) game.getScreen()).updateGame();
-			break;
-		case ' ':
-			try {
-				buttonClicked(((MainMenuScreen) activeScreen).activeButton);
-			} catch (Exception e) {
-				;
-			}
-			break;
+		System.out.println("");
+		if (!consoleActive) {
+			switch (character) {
+			case 'w':
+				scrolled(-1);
+				break;
+			case 's':
+				scrolled(1);
+				break;
+			case 'r':
+				if (game.currentScreen == 2)
+					((GameplayScreen) game.getScreen()).updateGame();
+				break;
+			case ' ':
+				try {
+					buttonClicked(((MainMenuScreen) activeScreen).activeButton);
+				} catch (Exception e) {
+					;
+				}
+				break;
 
-		case 'f':
-			try {
+			case 'f':
+				try {
 
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			break;
-		case 'g':
-			try {
-				GameInstance instance = ((GameplayScreen) game.getScreen()).instance;
-				instance.recolourInProgress = !instance.recolourInProgress;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				break;
+			case 'g':
+				try {
+					GameInstance instance = ((GameplayScreen) game.getScreen()).instance;
+					instance.recolourInProgress = !instance.recolourInProgress;
 
-			} catch (Exception e) {
-				e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				break;
 			}
-			break;
+
 		}
-
-		return true;
+		return false;
 	}
 
 	public void buttonClicked(int button) {
@@ -159,6 +163,7 @@ public class AmniInputProcessor implements InputProcessor {
 			}
 			System.out.println("No button was pressed.");
 		}
+		System.out.println("mouse clicked");
 		return false;
 	}
 

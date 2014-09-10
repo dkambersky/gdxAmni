@@ -96,4 +96,4 @@ public class GameInstance {
 
 		return true;
 	}
-}
+}	
