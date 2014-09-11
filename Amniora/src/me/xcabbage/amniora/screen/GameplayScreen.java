@@ -461,10 +461,30 @@ public class GameplayScreen implements Screen {
 		console_textfield_style.fontColor = Color.GREEN;
 		console_textfield = new TextField("Enter commands...",
 				console_textfield_style);
+
 		console_textfield.setBounds(
 				Gdx.graphics.getWidth() - console_sprite.getWidth() + 20,
 				Gdx.graphics.getHeight() - console_sprite.getHeight() - 50,
 				250, 50);
+		TextFieldListener console_textfield_listener = new TextFieldListener() {
+
+			@Override
+			public void keyTyped(TextField textField, char key) {
+				System.out.println(textField.getText());
+				if(key==';'){
+					textField.setText("");
+				}
+			}
+		};
+
+		console_textfield.setTextFieldListener(console_textfield_listener);
+		AmniInputProcessor.setStage(stage, console_textfield);
+		stage.unfocusAll();
+		stage.addActor(console_textfield);
+
+		multiplexer.addProcessor(stage);
+
+		// Gdx.input.setInputProcessor(stage);
 		AmniInputProcessor.consoleEnabled = true;
 
 	}
@@ -476,6 +496,7 @@ public class GameplayScreen implements Screen {
 		// orbitEverything();
 		try {
 			instance.updateBattlefield();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -536,9 +557,16 @@ public class GameplayScreen implements Screen {
 
 		// 2D Render
 		if (CONSOLE_ENABLED && !loading) {
+			try {
+				stage.act();
+				stage.draw();
+			} catch (Exception e) {
+				;
+			}
+
 			spriteBatch.begin();
 			console_sprite.draw(spriteBatch);
-			console_textfield.draw(spriteBatch, 1f);
+			// console_textfield.draw(spriteBatch, 1f);
 
 			spriteBatch.end();
 
@@ -597,9 +625,11 @@ public class GameplayScreen implements Screen {
 	/* unused methods */
 	@Override
 	public void resize(int width, int height) {
+
 		spriteBatch.getProjectionMatrix().setToOrtho2D(0, 0, width, height);
 		this.width = width;
 		this.height = height;
+
 	}
 
 	@Override

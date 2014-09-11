@@ -13,12 +13,17 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 
 public class AmniInputProcessor implements InputProcessor {
 	GameAmn game;
 	public Screen activeScreen;
 	public boolean rotating;
 	static public boolean consoleEnabled, consoleActive;
+
+	static Stage stage;
+	static TextField console_textfield;
 
 	public int direction;
 	int buttonPixels[][] = { { 116, 290, 236, 320, }, { 160, 370, 302, 408, },
@@ -30,6 +35,7 @@ public class AmniInputProcessor implements InputProcessor {
 
 	public AmniInputProcessor(final GameAmn gam) {
 		game = gam;
+
 	}
 
 	@Override
@@ -43,7 +49,6 @@ public class AmniInputProcessor implements InputProcessor {
 			rotating = true;
 			direction = -1;
 			return true;
-
 		case Input.Keys.ESCAPE:
 			game.dispose();
 			Gdx.app.exit();
@@ -113,6 +118,13 @@ public class AmniInputProcessor implements InputProcessor {
 				}
 
 				break;
+			case ';':
+				if (stage.getKeyboardFocus() == null) {
+					stage.setKeyboardFocus(console_textfield);
+					
+				} else
+					stage.setKeyboardFocus(null);
+				console_textfield.setText("Enter commands...");
 			}
 
 		}
@@ -266,6 +278,12 @@ public class AmniInputProcessor implements InputProcessor {
 		} else
 			System.out.println("Wrong parameter passed. Try, try again.");
 		cam.update();
+
+	}
+
+	public static void setStage(Stage stag, TextField field) {
+		stage = stag;
+		console_textfield = field;
 
 	}
 
