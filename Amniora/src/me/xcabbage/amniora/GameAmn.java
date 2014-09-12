@@ -10,6 +10,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 
 public class GameAmn extends Game {
+	// Global constants
+	private static final boolean PRINT_ERRORS = false;
 
 	public MainMenuScreen mainMenuScreen;
 	public GameplayScreen gameplayScreen;
@@ -68,9 +70,60 @@ public class GameAmn extends Game {
 	 * @param string
 	 */
 	public static void error(String string) {
-		
-		//TODO error pop-up? fluff?
-		System.out.println(string);
+		// TODO popups? logs? fluff?
+		if (PRINT_ERRORS) {
+			System.out.println(string);
+		}
 
+	}
+
+	/**
+	 * @param string
+	 */
+	public static void error(StackTraceElement[] trace) {
+		// TODO popups? logs? fluff?
+		if (PRINT_ERRORS) {
+
+			System.out.println(trace);
+		}
+
+	}
+
+	/**
+	 * @param text
+	 */
+	public static void sendConsole(String text) {
+
+		// Chop up the args
+		String[] args = text.split(" ");
+
+		// Handle the command
+		switch (args[0]) {
+		// / Debugging print
+		case "ping":
+			if (args[1] == null) {
+				// Bukkit's console easter egg tribute
+				System.out.println("Pong. I hear Thrax likes cute asian boys.");
+			} else {
+				int pingArgs = 0;
+				try {
+					pingArgs = Integer.parseInt(args[1]);
+				} catch (NumberFormatException e) {
+					System.out
+							.println("Wrong parameter passed to ping command");
+				} finally {
+					for (int a = 0; a < pingArgs; a++) {
+						System.out.println("Pong!");
+					}
+				}
+			}
+
+			// / Kill the app
+		case "kill":
+			System.out.println("Killing myself");
+			Gdx.app.exit();
+			break;
+
+		}
 	}
 }

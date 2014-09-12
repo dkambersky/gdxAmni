@@ -114,14 +114,15 @@ public class AmniInputProcessor implements InputProcessor {
 					instance.recolourInProgress = !instance.recolourInProgress;
 
 				} catch (Exception e) {
-					e.printStackTrace();
+					GameAmn.error(e.getLocalizedMessage());
+					GameAmn.error(e.getStackTrace());
 				}
 
 				break;
 			case ';':
 				if (stage.getKeyboardFocus() == null) {
 					stage.setKeyboardFocus(console_textfield);
-					
+
 				} else
 					stage.setKeyboardFocus(null);
 				console_textfield.setText("Enter commands...");

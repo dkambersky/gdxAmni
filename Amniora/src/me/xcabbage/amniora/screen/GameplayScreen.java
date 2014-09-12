@@ -470,11 +470,19 @@ public class GameplayScreen implements Screen {
 
 			@Override
 			public void keyTyped(TextField textField, char key) {
-				System.out.println(textField.getText());
-				if(key==';'){
+				System.out.println(key);
+				switch (key) {
+				case ';':
 					textField.setText("");
+					break;
+				case '\n':
+				case '\r':
+					GameAmn.sendConsole(textField.getText());
+					break;
+
 				}
 			}
+
 		};
 
 		console_textfield.setTextFieldListener(console_textfield_listener);
