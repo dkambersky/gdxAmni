@@ -1,8 +1,10 @@
 package me.xcabbage.amniora;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
+import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 
 import me.xcabbage.amniora.nonstatic.State;
 import me.xcabbage.amniora.nonstatic.Tile;
@@ -73,8 +75,17 @@ public class GameInstance {
 
 		System.out.println("setting " + tile.position + " | " + col);
 		mat.set(ColorAttribute.createDiffuse(col));
+
 		return true;
 
+	}
+
+	public boolean setTileTexture(Tile tile, Texture t) {
+		Material mat = screen.globeInstance.materials.get(tile.position);
+		mat.clear();
+		mat.set(TextureAttribute.createDiffuse(t));
+
+		return true;
 	}
 
 	public boolean updateBattlefield() {
@@ -84,11 +95,14 @@ public class GameInstance {
 				recolourPos = 0;
 			if ((Math.random() * 100) < 6f) {
 
-				setTileColor(
-						tiles[recolourPos],
-						Color.RED.cpy().set(((float) Math.random()),
-								((float) Math.random()),
-								((float) Math.random()), 1));
+				// setTileColor(
+				// tiles[recolourPos],
+				// Color.RED.cpy().set(((float) Math.random()),
+				// ((float) Math.random()),
+				// ((float) Math.random()), 1));
+				System.out.println("setting " + recolourPos + ", texture");
+				setTileTexture(tiles[recolourPos],
+						GameplayScreen.tile_texture_1);
 				recolourPos++;
 			}
 
@@ -96,4 +110,4 @@ public class GameInstance {
 
 		return true;
 	}
-}	
+}

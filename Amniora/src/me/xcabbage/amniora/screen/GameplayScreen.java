@@ -96,6 +96,7 @@ public class GameplayScreen implements Screen {
 	private ModelBatch modelBatch;
 	public Mesh mesh;
 	public ModelInstance moving;
+	public static Texture tile_texture_1;
 	Pixmap globeMap;
 
 	Mesh globeMesh;
@@ -198,6 +199,8 @@ public class GameplayScreen implements Screen {
 
 		texture = new Texture(Gdx.files.internal("data/earth2.jpg"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		tile_texture_1 = new Texture(Gdx.files.internal("data/texture_1.png"));
 
 		/*
 		 * stuff with xz -> xyz (spherical) FIRST: generate xz slots, create
