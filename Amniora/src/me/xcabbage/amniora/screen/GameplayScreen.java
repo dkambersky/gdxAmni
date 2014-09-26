@@ -201,6 +201,7 @@ public class GameplayScreen implements Screen {
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		tile_texture_1 = new Texture(Gdx.files.internal("data/texture_1.png"));
+		tile_texture_1.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		/*
 		 * stuff with xz -> xyz (spherical) FIRST: generate xz slots, create
@@ -368,12 +369,11 @@ public class GameplayScreen implements Screen {
 		// Create mesh nodes
 		for (int a = 0; a < ico.vertices.length; a = a + 9) {
 
-			MeshPartBuilder builder = mb
-					.part("v" + a,
-							GL20.GL_TRIANGLES,
-							Usage.Position,
-							new Material(ColorAttribute
-									.createDiffuse(Color.LIGHT_GRAY)));
+			MeshPartBuilder builder = mb.part("v" + a, GL20.GL_TRIANGLES,
+					Usage.Position | Usage.TextureCoordinates, new Material(
+							ColorAttribute.createDiffuse(Color.LIGHT_GRAY)));
+
+			builder.setUVRange(0, 0, 1, 1);
 			Vector3 v1 = new Vector3(ico.vertices[a], ico.vertices[a + 1],
 					ico.vertices[a + 2]);
 			Vector3 v2 = new Vector3(ico.vertices[a + 3], ico.vertices[a + 4],
@@ -382,14 +382,20 @@ public class GameplayScreen implements Screen {
 					ico.vertices[a + 8]);
 
 			builder.triangle(v1, v2, v3);
-			final short index1 = builder.vertex(v1, null, null, null);
-			final short index2 = builder.vertex(v2, null, null, null);
-			final short index3 = builder.vertex(v3, null, null, null);
-			builder.index(index1, index2, index3);
 
+			final short index1 = builder.vertex(v1, null, null, new Vector2(
+					0.5f, 0.5f));
+			final short index2 = builder.vertex(v2, null, null, new Vector2(0,
+					0));
+			final short index3 = builder.vertex(v3, null, null, new Vector2(1,
+					1));
+			builder.index(index1, index2, index3);
+			System.out.println(builder.getAttributes().size() + " | "
+					+ builder.getAttributes());
 		}
 
 		Model model = mb.end();
+
 		System.out.println(model.meshParts.size + " nodes registered.");
 		globeInstance = new ModelInstance(model);
 		instances.add(globeInstance);
