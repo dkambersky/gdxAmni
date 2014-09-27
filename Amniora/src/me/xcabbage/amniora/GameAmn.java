@@ -11,7 +11,8 @@ import com.badlogic.gdx.InputMultiplexer;
 
 public class GameAmn extends Game {
 	// Global constants
-	private static final boolean PRINT_ERRORS = false;
+	public static final boolean PRINT_ERRORS = false;
+	public static final boolean DEBUG_TEXTURES = true;
 
 	public MainMenuScreen mainMenuScreen;
 	public GameplayScreen gameplayScreen;
@@ -20,6 +21,8 @@ public class GameAmn extends Game {
 	public AmniInputProcessor standardProcessor;
 	public Json json;
 	public static GameInstance inst;
+	private static int regDirection;
+	private static boolean regActive;
 
 	@Override
 	public void create() {
@@ -101,7 +104,7 @@ public class GameAmn extends Game {
 		switch (args[0]) {
 		// / Debugging print
 		case "ping":
-			if (args[1] == null) {
+			if (args.length == 1) {
 				// Bukkit's console easter egg tribute
 				System.out.println("Pong. I hear Thrax likes cute asian boys.");
 			} else {
@@ -117,12 +120,20 @@ public class GameAmn extends Game {
 					}
 				}
 			}
-
-			// / Kill the app
+			break;
+		// / Kill the app
 		case "kill":
 			System.out.println("Killing myself");
 			Gdx.app.exit();
 			break;
+
+		case "reg":
+
+			regActive = true;
+			if (args[1] == "end") {
+				regActive = false;
+			} else
+				regDirection = Integer.parseInt(args[1]);
 
 		}
 	}

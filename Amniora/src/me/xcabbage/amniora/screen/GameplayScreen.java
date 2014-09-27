@@ -213,8 +213,8 @@ public class GameplayScreen implements Screen {
 		tileTextures = new Texture[80];
 
 		for (int a = 0; a < 80; a++) {
-			tempMap = new Pixmap(Gdx.files.internal("data/texCount.png"));
-			pixmapDrawString(tempMap, a + "", F_buttons, 60, 60, 20);
+			tempMap = new Pixmap(Gdx.files.internal("data/texCount22.png"));
+			pixmapDrawString(tempMap, a + "", F_debug, 20, 20, 20);
 			tileTextures[a] = new Texture(tempMap);
 		}
 
@@ -274,7 +274,7 @@ public class GameplayScreen implements Screen {
 
 	}
 
-	 public void doneLoading() {
+	public void doneLoading() {
 
 		// DEBUG
 		if (CONSOLE_ENABLED) {
@@ -398,8 +398,8 @@ public class GameplayScreen implements Screen {
 
 			builder.triangle(v1, v2, v3);
 
-			final short index1 = builder.vertex(v1, null, null, new Vector2(
-					0, 1));
+			final short index1 = builder.vertex(v1, null, null, new Vector2(0,
+					1));
 			final short index2 = builder.vertex(v2, null, null, new Vector2(0,
 					0));
 			final short index3 = builder.vertex(v3, null, null, new Vector2(1,
@@ -554,8 +554,9 @@ public class GameplayScreen implements Screen {
 	// render
 	@Override
 	public void render(float delta) {
-		if (loading && assets.update())
+		if (loading && assets.update()) {
 			doneLoading();
+		}
 
 		Gdx.gl.glViewport(0, 0, Gdx.graphics.getWidth(),
 				Gdx.graphics.getHeight());
@@ -597,11 +598,21 @@ public class GameplayScreen implements Screen {
 			}
 
 			spriteBatch.begin();
+
 			console_sprite.draw(spriteBatch);
 			// console_textfield.draw(spriteBatch, 1f);
 
 			spriteBatch.end();
 
+		}
+		if (GameAmn.DEBUG_TEXTURES && !loading) {
+			Texture tex = tileTextures[3];
+			// tex.bind();
+			spriteBatch.begin();
+
+			spriteBatch.draw(tex, 0, 0, tex.getWidth(), tex.getHeight(), 1, 1,
+					0, 0);
+			spriteBatch.end();
 		}
 
 	}
@@ -665,6 +676,8 @@ public class GameplayScreen implements Screen {
 			source.drawPixmap(fontPixmap, x + (a * spacing), y, tempGlyph.srcX,
 					tempGlyph.srcY, tempGlyph.width, tempGlyph.height);
 		}
+
+		System.out.println("Drawing, lol");
 		// Gdx.files.internal(data.getImagePath(tempGlyph.id))
 
 	}
