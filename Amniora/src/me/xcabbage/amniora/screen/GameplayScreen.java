@@ -24,6 +24,8 @@ import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -123,6 +125,10 @@ public class GameplayScreen implements Screen {
 	private TextFieldStyle console_textfield_style;
 	private InputProcessor console_processor;
 
+	// // /DEBUG!
+	Pixmap tempMap;
+	public static Texture[] tileTextures;
+
 	// // / LOADING - CREATION
 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
@@ -203,6 +209,15 @@ public class GameplayScreen implements Screen {
 		tile_texture_1 = new Texture(Gdx.files.internal("data/texture_1.png"));
 		tile_texture_1.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
+		// numbered tiles creation
+		tileTextures = new Texture[80];
+
+		for (int a = 0; a < 80; a++) {
+			tempMap = new Pixmap(Gdx.files.internal("data/texCount.png"));
+			pixmapDrawString(tempMap, a + "", F_buttons, 60, 60, 20);
+			tileTextures[a] = new Texture(tempMap);
+		}
+
 		/*
 		 * stuff with xz -> xyz (spherical) FIRST: generate xz slots, create
 		 * colors
@@ -259,7 +274,7 @@ public class GameplayScreen implements Screen {
 
 	}
 
-	public void doneLoading() {
+	 public void doneLoading() {
 
 		// DEBUG
 		if (CONSOLE_ENABLED) {
@@ -384,11 +399,11 @@ public class GameplayScreen implements Screen {
 			builder.triangle(v1, v2, v3);
 
 			final short index1 = builder.vertex(v1, null, null, new Vector2(
-					0.5f, 0.5f));
+					0, 1));
 			final short index2 = builder.vertex(v2, null, null, new Vector2(0,
 					0));
 			final short index3 = builder.vertex(v3, null, null, new Vector2(1,
-					1));
+					0));
 			builder.index(index1, index2, index3);
 			System.out.println(builder.getAttributes().size() + " | "
 					+ builder.getAttributes());
@@ -634,6 +649,23 @@ public class GameplayScreen implements Screen {
 		float theta = (float) Math.asin(z);
 		return new Vector3((float) (Math.cos(theta) * Math.cos(phi)),
 				(float) (Math.cos(theta) * Math.sin(phi)), z);
+
+	}
+
+	// Draw text to pixmap
+	public void pixmapDrawString(Pixmap source, String text, BitmapFont font,
+			int x, int y, int spacing) {
+		BitmapFontData data = font.getData();
+
+		for (int a = 0; a < text.length(); a++) {
+			Glyph tempGlyph = data.getGlyph(text.charAt(a));
+
+			Pixmap fontPixmap = new Pixmap(
+					Gdx.files.internal(data.imagePaths[0]));
+			source.drawPixmap(fontPixmap, x + (a * spacing), y, tempGlyph.srcX,
+					tempGlyph.srcY, tempGlyph.width, tempGlyph.height);
+		}
+		// Gdx.files.internal(data.getImagePath(tempGlyph.id))
 
 	}
 

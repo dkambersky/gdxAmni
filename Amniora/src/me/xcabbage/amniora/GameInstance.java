@@ -102,7 +102,7 @@ public class GameInstance {
 				// ((float) Math.random()), 1));
 				System.out.println("setting " + recolourPos + ", texture");
 				setTileTexture(tiles[recolourPos],
-						GameplayScreen.tile_texture_1);
+						GameplayScreen.tileTextures[recolourPos]);
 				recolourPos++;
 			}
 
