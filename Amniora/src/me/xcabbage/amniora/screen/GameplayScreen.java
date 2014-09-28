@@ -130,7 +130,7 @@ public class GameplayScreen implements Screen {
 	public static Texture[] tileTextures;
 
 	// // / LOADING - CREATION
-	public GameplayScreen(final GameAmn gam) {
+ 	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		game = gam;
@@ -214,7 +214,7 @@ public class GameplayScreen implements Screen {
 
 		for (int a = 0; a < 80; a++) {
 			tempMap = new Pixmap(Gdx.files.internal("data/texCount22.png"));
-			pixmapDrawString(tempMap, a + "", F_debug, 20, 20, 20);
+			pixmapDrawString(tempMap, a + "", F_debug, 20, 20, 14);
 			tileTextures[a] = new Texture(tempMap);
 		}
 
