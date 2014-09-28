@@ -49,6 +49,15 @@ public class AmniInputProcessor implements InputProcessor {
 			rotating = true;
 			direction = -1;
 			return true;
+		case Input.Keys.K:
+			rotating = true;
+			direction = 2;
+			return true;
+		case Input.Keys.L:
+			rotating = true;
+			direction = 3;
+			return true;
+			
 		case Input.Keys.ESCAPE:
 			game.dispose();
 			Gdx.app.exit();
@@ -72,7 +81,12 @@ public class AmniInputProcessor implements InputProcessor {
 		case Input.Keys.P:
 			rotating = false;
 			return true;
-
+		case Input.Keys.K:
+			rotating = false;
+			return true;
+		case Input.Keys.L:
+			rotating = false;
+			return true;
 		default:
 			return false;
 		}
@@ -123,9 +137,12 @@ public class AmniInputProcessor implements InputProcessor {
 				if (stage.getKeyboardFocus() == null) {
 					stage.setKeyboardFocus(console_textfield);
 
-				} else
+				} else{
 					stage.setKeyboardFocus(null);
-				console_textfield.setText("Enter commands...");
+				
+				console_textfield.setText("Enter commands...");}
+				break;
+			
 			}
 
 		}
@@ -276,8 +293,12 @@ public class AmniInputProcessor implements InputProcessor {
 			cam.rotateAround(Vector3.Zero, new Vector3(0, 1, 0), 5f);
 		} else if (direction == -1) {
 			cam.rotateAround(Vector3.Zero, new Vector3(0, 1, 0), -5f);
-		} else
-			System.out.println("Wrong parameter passed. Try, try again.");
+		} else if (direction == 2) {
+			cam.rotateAround(Vector3.Zero, new Vector3(0, 0, 1), 5f);
+		} else if (direction == 3) {
+			cam.rotateAround(Vector3.Zero, new Vector3(1, 0, 0), 5f);
+		}
+		System.out.println("Wrong parameter passed. Try, try again.");
 		cam.update();
 
 	}
