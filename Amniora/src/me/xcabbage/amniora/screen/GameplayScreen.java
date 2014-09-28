@@ -362,7 +362,7 @@ public class GameplayScreen implements Screen {
 		// builder.triangle(index1, index3, index2);
 		// index1 = index3;
 		// } catch (Exception e) {
-		// e.printStackTrace();
+		// GameAmn.error(e.getStackTrace());
 		// }
 		// }
 
@@ -530,7 +530,7 @@ public class GameplayScreen implements Screen {
 			instance.updateBattlefield();
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 		}
 
 	}

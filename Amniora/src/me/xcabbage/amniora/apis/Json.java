@@ -1,5 +1,6 @@
 package me.xcabbage.amniora.apis;
 
+import me.xcabbage.amniora.GameAmn;
 import net.enigmablade.riotapi.RiotApi;
 import net.enigmablade.riotapi.constants.Region;
 import net.enigmablade.riotapi.constants.Season;
@@ -15,6 +16,7 @@ public class Json {
 	 * API
 	 */
 	public final String adress = "https://prod.api.pvp.net/api/";
+	//pls no stealerino ;_;
 	public final String apiKey = "4b485ad8-8bcd-4646-9947-1bf95481a03f";
 	RiotApi api;
 	Summoner profile;
@@ -33,7 +35,7 @@ public class Json {
 			return true;
 		} catch (RiotApiException e) {
 
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 
 			return false;
 		}
@@ -47,7 +49,7 @@ public class Json {
 					.getSummonerLevel());
 		} catch (RiotApiException e) {
 
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 			return "Error fetching data; Check the logs.";
 		}
 	}
@@ -60,11 +62,11 @@ public class Json {
 			return true;
 		} catch (RiotApiException e) {
 
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 
 			return false;
 		} catch (Exception e) {
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 			return false;
 		}
 	}
@@ -75,7 +77,7 @@ public class Json {
 					profile.getRegion(), profile.getId(), Season.SEASON_4));
 		} catch (RiotApiException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 		}
 	}
 }

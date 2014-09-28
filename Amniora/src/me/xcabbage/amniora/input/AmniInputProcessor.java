@@ -119,7 +119,8 @@ public class AmniInputProcessor implements InputProcessor {
 				try {
 
 				} catch (Exception e) {
-					e.printStackTrace();
+					GameAmn.error(e.getStackTrace());
+					GameAmn.error(e.getStackTrace());
 				}
 				break;
 			case 'g':
@@ -244,7 +245,7 @@ public class AmniInputProcessor implements InputProcessor {
 
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			GameAmn.error(e.getStackTrace());
 		}
 
 	}
@@ -272,7 +273,7 @@ public class AmniInputProcessor implements InputProcessor {
 				}
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				GameAmn.error(e.getStackTrace());
 			}
 		}
 		return false;
