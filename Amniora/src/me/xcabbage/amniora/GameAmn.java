@@ -13,6 +13,7 @@ public class GameAmn extends Game {
 	// Global constants
 	public static final boolean PRINT_ERRORS = false;
 	public static final boolean DEBUG_TEXTURES = true;
+	public static final boolean PRINT_ALERTS = true;
 
 	public MainMenuScreen mainMenuScreen;
 	public GameplayScreen gameplayScreen;
@@ -69,33 +70,11 @@ public class GameAmn extends Game {
 	public void resume() {
 	}
 
-	/**
-	 * @param string
-	 */
-	public static void error(String string) {
-		// TODO popups? logs? fluff?
-		if (PRINT_ERRORS) {
-			System.out.println(string);
-		}
-
-	}
-
-	/**
-	 * @param string
-	 */
-	public static void error(StackTraceElement[] trace) {
-		// TODO popups? logs? fluff?
-		if (PRINT_ERRORS) {
-
-			System.out.println(trace);
-		}
-
-	}
-
+	// CONSOLE
 	/**
 	 * @param text
 	 */
-	public static void sendConsole(String text) {
+ 	public static void sendConsole(String text) {
 
 		// Chop up the args
 		String[] args = text.split(" ");
@@ -128,13 +107,56 @@ public class GameAmn extends Game {
 			break;
 
 		case "reg":
-
 			regActive = true;
-			if (args[1] == "end") {
+			if (args[1].equalsIgnoreCase("end")) {
 				regActive = false;
-			} else
-				regDirection = Integer.parseInt(args[1]);
+
+			} else {
+
+				try {
+					regDirection = Integer.parseInt(args[1]);
+				} catch (NumberFormatException e) {
+					GameAmn.error(e.getStackTrace());
+					GameAmn.alert("Wrong parameter passed to reg command: "
+							+ args[1]);
+				}
+			}
+			System.out.println("Reg " + regActive + " in direction of "
+					+ regDirection);
+			break;
 
 		}
 	}
+
+	// ERRORS & ALERTS
+	public static void alert(String text) {
+		// TODO as with errors - fluff, popups?
+		if (PRINT_ALERTS) {
+			System.out.println(text);
+		}
+	}
+
+	/**
+	 * @param string
+	 */
+	public static void error(String string) {
+		// TODO popups? logs? fluff?
+		if (PRINT_ERRORS) {
+			System.out.println(string);
+		}
+
+	}
+
+	/**
+	 * @param string
+	 */
+	public static void error(StackTraceElement[] trace) {
+		// TODO popups? logs? fluff?
+		if (PRINT_ERRORS) {
+
+			System.out.println(trace);
+		}
+
+	}
+
 }

@@ -130,7 +130,7 @@ public class GameplayScreen implements Screen {
 	public static Texture[] tileTextures;
 
 	// // / LOADING - CREATION
- 	public GameplayScreen(final GameAmn gam) {
+	public GameplayScreen(final GameAmn gam) {
 		Gdx.gl.glEnable(GL20.GL_TEXTURE_2D);
 
 		game = gam;
@@ -165,11 +165,12 @@ public class GameplayScreen implements Screen {
 
 		multiplexer = new InputMultiplexer();
 		camController = new CameraInputController(camera);
+		multiplexer.addProcessor(new AmniInputProcessor(gam));
 		multiplexer.addProcessor(camController);
 
-		multiplexer.addProcessor(new AmniInputProcessor(gam));
-		((AmniInputProcessor) multiplexer.getProcessors().get(1))
-				.setCamera(camera);
+		((AmniInputProcessor) multiplexer.getProcessors().get(0)).setCamera(
+				camera, (CameraInputController) multiplexer.getProcessors()
+						.get(1));
 
 		// Lighting init
 		environment = new Environment();
@@ -494,14 +495,19 @@ public class GameplayScreen implements Screen {
 
 			@Override
 			public void keyTyped(TextField textField, char key) {
-				System.out.println(key);
+
 				switch (key) {
 				case ';':
 					textField.setText("");
 					break;
+				case '\\':
+					stage.setKeyboardFocus(null);
+					AmniInputProcessor.consoleActive = false;
+					textField.setText("");
 				case '\n':
 				case '\r':
 					GameAmn.sendConsole(textField.getText());
+					textField.setText("Enter commands...");
 					break;
 
 				}
@@ -585,7 +591,7 @@ public class GameplayScreen implements Screen {
 		}
 		shapeRenderer.end();
 
-		((AmniInputProcessor) multiplexer.getProcessors().get(1)).update();
+		((AmniInputProcessor) multiplexer.getProcessors().get(0)).update();
 		updateGame();
 
 		// 2D Render

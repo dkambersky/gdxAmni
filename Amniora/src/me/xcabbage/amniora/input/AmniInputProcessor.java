@@ -12,6 +12,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -32,6 +33,7 @@ public class AmniInputProcessor implements InputProcessor {
 
 	};
 	private Camera cam;
+	private CameraInputController camController;
 
 	public AmniInputProcessor(final GameAmn gam) {
 		game = gam;
@@ -40,61 +42,69 @@ public class AmniInputProcessor implements InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		switch (keycode) {
-		case Input.Keys.O:
-			rotating = true;
-			direction = 1;
-			return true;
-		case Input.Keys.P:
-			rotating = true;
-			direction = -1;
-			return true;
-		case Input.Keys.K:
-			rotating = true;
-			direction = 2;
-			return true;
-		case Input.Keys.L:
-			rotating = true;
-			direction = 3;
-			return true;
-			
-		case Input.Keys.ESCAPE:
-			game.dispose();
-			Gdx.app.exit();
-			return true;
-		default:
-			return true;
+		if (!consoleActive) {
+			switch (keycode) {
+			case Input.Keys.O:
+				rotating = true;
+				direction = 1;
+				return true;
+			case Input.Keys.P:
+				rotating = true;
+				direction = -1;
+				return true;
+			case Input.Keys.K:
+				rotating = true;
+				direction = 2;
+				return true;
+			case Input.Keys.L:
+				rotating = true;
+				direction = 3;
+				return true;
+
+			case Input.Keys.ESCAPE:
+				game.dispose();
+				Gdx.app.exit();
+				return true;
+			default:
+				return false;
 
 		}
+
+		}
+		return true;
 	}
 
-	public void setCamera(Camera cam) {
+	public void setCamera(Camera cam, CameraInputController controller) {
 		this.cam = cam;
+		this.camController = controller;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		switch (keycode) {
-		case Input.Keys.O:
-			rotating = false;
-			return true;
-		case Input.Keys.P:
-			rotating = false;
-			return true;
-		case Input.Keys.K:
-			rotating = false;
-			return true;
-		case Input.Keys.L:
-			rotating = false;
-			return true;
-		default:
-			return false;
+		if (!consoleActive) {
+			switch (keycode) {
+			case Input.Keys.O:
+				rotating = false;
+				return true;
+			case Input.Keys.P:
+				rotating = false;
+				return true;
+			case Input.Keys.K:
+				rotating = false;
+				return true;
+			case Input.Keys.L:
+				rotating = false;
+				return true;
+			default:
+				return false;
+			}
 		}
+		return false;
 	}
 
 	@Override
-	public boolean keyTyped(char character) {
-		System.out.println("");
+ 	public boolean keyTyped(char character) {
+
 		if (!consoleActive) {
 			switch (character) {
 			case 'w':
@@ -114,15 +124,6 @@ public class AmniInputProcessor implements InputProcessor {
 					;
 				}
 				break;
-
-			case 'f':
-				try {
-
-				} catch (Exception e) {
-					GameAmn.error(e.getStackTrace());
-					GameAmn.error(e.getStackTrace());
-				}
-				break;
 			case 'g':
 				try {
 					GameInstance instance = ((GameplayScreen) game.getScreen()).instance;
@@ -135,15 +136,18 @@ public class AmniInputProcessor implements InputProcessor {
 
 				break;
 			case ';':
+				consoleActive = !consoleActive;
+System.out.println(consoleActive+": console");
 				if (stage.getKeyboardFocus() == null) {
 					stage.setKeyboardFocus(console_textfield);
 
-				} else{
+				} else {
 					stage.setKeyboardFocus(null);
-				
-				console_textfield.setText("Enter commands...");}
+
+					console_textfield.setText("Enter commands...");
+				}
 				break;
-			
+
 			}
 
 		}
@@ -194,7 +198,7 @@ public class AmniInputProcessor implements InputProcessor {
 			}
 			System.out.println("No button was pressed.");
 		}
-		System.out.println("mouse clicked");
+
 		return false;
 	}
 
@@ -298,8 +302,9 @@ public class AmniInputProcessor implements InputProcessor {
 			cam.rotateAround(Vector3.Zero, new Vector3(0, 0, 1), 5f);
 		} else if (direction == 3) {
 			cam.rotateAround(Vector3.Zero, new Vector3(1, 0, 0), 5f);
+		} else {
+			System.out.println("Wrong parameter passed. Try, try again.");
 		}
-		System.out.println("Wrong parameter passed. Try, try again.");
 		cam.update();
 
 	}
