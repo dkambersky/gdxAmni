@@ -229,8 +229,10 @@ public class GameplayScreen implements Screen {
 		for (float i = 0; i <= 1f; i = i + 0.1f) {
 			for (float j = 0; j <= 1f; j = j + 0.1f) {
 				xzVect[count] = new Vector2(i, j);
-				System.out.println("Registered xz vector on position " + count
-						+ ": " + xzVect[count]);
+				if (GameAmn.PRINT_STATUS) {
+					System.out.println("Registered xz vector on position "
+							+ count + ": " + xzVect[count]);
+				}
 				switch (count % 6) {
 				case 1:
 					pointColor[count] = Color.RED;
@@ -266,8 +268,10 @@ public class GameplayScreen implements Screen {
 
 		for (int a = 0; a < VECTOR_COUNT; a++) {
 
-			System.out.println("Translated " + xzVect[a] + " to "
-					+ sphereVect[a] + ".");
+			if (GameAmn.PRINT_STATUS) {
+				System.out.println("Translated " + xzVect[a] + " to "
+						+ sphereVect[a] + ".");
+			}
 		}
 
 		// proceed
@@ -445,19 +449,27 @@ public class GameplayScreen implements Screen {
 					}
 				} else {
 					col = Color.ORANGE.cpy();
-					System.out.println(a + "....");
-					System.out.println("orig: " + col);
+					if (GameAmn.PRINT_STATUS) {
+						System.out.println(a + "....");
+						System.out.println("orig: " + col);
+					}
 					float rNew = (float) a / 80;
-					System.out.println(a + " / 80");
-					System.out.println((float) a / 80 + " | " + (float) a / 80
-							+ " | " + (float) a / 80 + " | " + 1f);
+					if (GameAmn.PRINT_STATUS) {
+						System.out.println(a + " / 80");
+						System.out.println((float) a / 80 + " | " + (float) a
+								/ 80 + " | " + (float) a / 80 + " | " + 1f);
+					}
 					// col.set((float) a /80, (float) a / 80, (float) a / 80,
 					// 1f);
 					col.set(0, 0, (float) a / 80, 1f);
-					System.out.println("new: " + col);
+					if (GameAmn.PRINT_STATUS) {
+						System.out.println("new: " + col);
+					}
 				}
 				mate.set(ColorAttribute.createDiffuse(col));
-				System.out.println("Assigning " + a);
+				if (GameAmn.PRINT_STATUS) {
+					System.out.println("Assigning " + a);
+				}
 			} catch (Exception e) {
 				System.out.println("Can't assign color to mat number " + a);
 			}
@@ -683,7 +695,9 @@ public class GameplayScreen implements Screen {
 					tempGlyph.srcY, tempGlyph.width, tempGlyph.height);
 		}
 
-		System.out.println("Drawing, lol");
+		if (GameAmn.PRINT_STATUS) {
+			System.out.println("Drawing, lol");
+		}
 		// Gdx.files.internal(data.getImagePath(tempGlyph.id))
 
 	}
@@ -737,8 +751,10 @@ public class GameplayScreen implements Screen {
 			col1[a].b = bA;
 			col1[a].r = rA;
 			col1[a].g = gA;
-			System.out.println("randomizing " + a + " " + rA + "," + col1[a].g
-					+ "," + bA);
+			if (GameAmn.PRINT_STATUS) {
+				System.out.println("randomizing " + a + " " + rA + ","
+						+ col1[a].g + "," + bA);
+			}
 
 		}
 
@@ -769,10 +785,12 @@ public class GameplayScreen implements Screen {
 					break;
 				}
 				mate.set(ColorAttribute.createDiffuse(Color.BLUE));
-
-				System.out.println("Assigning " + col.r + "," + col.g + ","
-						+ col.b);
+				if (GameAmn.PRINT_STATUS) {
+					System.out.println("Assigning " + col.r + "," + col.g + ","
+							+ col.b);
+				}
 			} catch (Exception e) {
+
 				System.out.println("Can't assign color to mat number " + a);
 			}
 

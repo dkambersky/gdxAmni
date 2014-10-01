@@ -1,7 +1,9 @@
 package me.xcabbage.amniora;
 
 import net.enigmablade.riotapi.constants.Region;
+import me.xcabbage.amniora.apis.JaxbWrapper;
 import me.xcabbage.amniora.apis.Json;
+import me.xcabbage.amniora.apis.Variables;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.screen.*;
 
@@ -12,6 +14,7 @@ import com.badlogic.gdx.InputMultiplexer;
 public class GameAmn extends Game {
 	// Global constants
 	public static final boolean PRINT_ERRORS = false;
+	public static final boolean PRINT_STATUS = false;
 	public static final boolean DEBUG_TEXTURES = true;
 	public static final boolean PRINT_ALERTS = true;
 
@@ -25,8 +28,16 @@ public class GameAmn extends Game {
 	private static int regDirection;
 	private static boolean regActive;
 
+	public static void runDebug() {
+		Variables.init();
+		JaxbWrapper.saveVariables(Variables.getVar());
+		alert("Debug method finished");
+	}
+
 	@Override
 	public void create() {
+		// Run whatever code is needed for debugging atm
+		runDebug();
 		// Riot API
 
 		json = new Json();
@@ -74,7 +85,7 @@ public class GameAmn extends Game {
 	/**
 	 * @param text
 	 */
- 	public static void sendConsole(String text) {
+	public static void sendConsole(String text) {
 
 		// Chop up the args
 		String[] args = text.split(" ");

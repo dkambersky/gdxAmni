@@ -16,7 +16,7 @@ import me.xcabbage.amniora.GameAmn;
  * 
  */
 public class JaxbWrapper {
-	public static void saveVariables(Variables var) {
+	public static void saveVariables(Variables var) { 
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(Variables.class);
@@ -25,6 +25,7 @@ public class JaxbWrapper {
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(var, System.out);
+			
 
 		} catch (JAXBException e) {
 
