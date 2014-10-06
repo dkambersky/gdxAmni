@@ -16,7 +16,7 @@ import me.xcabbage.amniora.GameAmn;
  * 
  */
 @XmlRootElement
-public class Variables {
+public class 	 {
 	@XmlAttribute
 	static int[][] tileDirections;
 
