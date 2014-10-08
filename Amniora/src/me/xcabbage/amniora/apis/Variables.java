@@ -16,7 +16,7 @@ import me.xcabbage.amniora.GameAmn;
  * 
  */
 @XmlRootElement
-public class 	 {
+public class Variables {
 	@XmlAttribute
 	static int[][] tileDirections;
 
@@ -24,7 +24,7 @@ public class 	 {
 
 	public static void init() {
 		var = new Variables();
-		var.fill();
+		loadDirections();
 	}
 
 	public void fill() {
@@ -36,8 +36,58 @@ public class 	 {
 			}
 
 		}
+
 	}
 
+	public static void flushDirections() {
+		for (int a = 0; a < 4; a++) {
+			for (int b = 0; b < 80; b++) {
+
+				PropertiesHandler.saveProperty("dir." + a + "." + b,
+						Variables.getDirection(a, b) + "");
+			}
+		}
+
+	}
+
+	public static void loadDirections() {
+		for (int a = 0; a < 4; a++) {
+			for (int b = 0; b < 80; b++) {
+				tileDirections[a][b] = Integer.parseInt(PropertiesHandler
+						.getProperty("dir." + a + "." + b));
+			}
+		}
+
+	}
+
+	public static int getDirection(int direction, int tile) {
+
+		try {
+			return tileDirections[direction][tile];
+		} catch (Exception e) {
+			GameAmn.error(e.getStackTrace());
+			GameAmn.alert("Wrong parameter passed to getDirection: "
+					+ direction + " | " + tile);
+			return -1;
+		}
+
+	}
+
+	
+	public static void setDirection(int direction, int tile, int value) {
+
+		try {
+			tileDirections[direction][tile] = value;
+		} catch (Exception e) {
+			GameAmn.error(e.getStackTrace());
+			GameAmn.alert("Wrong parameter passed to setDirection: "
+					+ direction + " | " + tile);
+
+		}
+
+	}
+
+	
 	/**
 	 * @return the var
 	 */
@@ -47,6 +97,7 @@ public class 	 {
 		return var;
 	}
 
+	
 	/**
 	 * @param var
 	 *            the var to set
@@ -54,4 +105,5 @@ public class 	 {
 	public static void setVar(Variables var) {
 		Variables.var = var;
 	}
+
 }

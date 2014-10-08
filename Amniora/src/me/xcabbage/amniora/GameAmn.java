@@ -3,6 +3,7 @@ package me.xcabbage.amniora;
 import net.enigmablade.riotapi.constants.Region;
 import me.xcabbage.amniora.apis.JaxbWrapper;
 import me.xcabbage.amniora.apis.Json;
+import me.xcabbage.amniora.apis.PropertiesHandler;
 import me.xcabbage.amniora.apis.Variables;
 import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.screen.*;
@@ -28,10 +29,16 @@ public class GameAmn extends Game {
 	private static int regDirection;
 	private static boolean regActive;
 
-	public static void runDebug() {
+ 	public static void runDebug() {
 		Variables.init();
-		JaxbWrapper.saveVariables(Variables.getVar());
+
+
+		PropertiesHandler.saveProperty("dir." + 0 + "." + 50, 30 + "");
+
+		GameAmn.alert("Dir [0] & [50] is: "
+				+ PropertiesHandler.getDirection(0, 50));
 		alert("Debug method finished");
+
 	}
 
 	@Override

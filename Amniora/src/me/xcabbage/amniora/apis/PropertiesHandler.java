@@ -120,7 +120,6 @@ public class PropertiesHandler {
 
 			try {
 
-				// TODO Hynek - sort this shit out
 				PropertiesHandler.init();
 				FileInputStream IStream = new FileInputStream(
 						savedpropspath.toString());
@@ -173,4 +172,20 @@ public class PropertiesHandler {
 		}
 
 	}
+
+	public static int getDirection(int direction, int tile) {
+
+		try {
+			System.out.println("Getting | " + "dir." + direction + "." + tile);
+			return Integer
+					.parseInt(getProperty("dir." + direction + "." + tile));
+		} catch (Exception e) {
+			GameAmn.error(e.getStackTrace());
+			GameAmn.alert("Wrong parameter passed to getDirection: "
+					+ direction + " | " + tile);
+			return -1;
+		}
+
+	}
+
 }
