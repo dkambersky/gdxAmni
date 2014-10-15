@@ -29,74 +29,81 @@ public class PropertiesHandler {
 												// props
 	static Properties prop = new Properties();
 
-	public static void init() throws IOException {
-
-		// create and load default properties
-		Properties defaultProps = new Properties();
+	public static void init() {
 		try {
-			FileInputStream DIStream = new FileInputStream(
+			// create and load default properties
+			Properties defaultProps = new Properties();
+			try {
+				FileInputStream DIStream = new FileInputStream(
+						savedpropspath.toString());
+				defaultProps.load(DIStream);
+				// defaultProps.list(System.out);
+
+				DIStream.close();
+			} catch (FileNotFoundException e1) {
+				GameAmn.alert("Could not find properties; creating default.");
+
+				// create folder if it isn't found
+				GameAmn.alert("Creating new folder for Amniora at "
+						+ savedpropspath);
+				File dir = new File(System.getenv("APPDATA") + "\\Amniora");
+				dir.mkdir();
+
+				// if they are not found, set the default properties value
+				defaultProps.setProperty("musicvolume", "0.18f");
+				defaultProps.setProperty("soundvolume", "1f");
+				defaultProps.setProperty("speechvolume", "100");
+				defaultProps.setProperty("shipScale", "0.1f");
+				defaultProps.setProperty("database", "localhost");
+				defaultProps.setProperty("dbuser", "defaultuser");
+
+				defaultProps.setProperty("graphicsquality", "high");
+				defaultProps.setProperty("fontGreatHeader", "Basica v.2012");
+				defaultProps.setProperty("fontNormalHeader", "Freedom");
+				defaultProps.setProperty("fontEntry", "Complex");
+				defaultProps.setProperty("fontText", "Orena");
+
+				defaultProps.setProperty("optionsEnabled", "true");
+				defaultProps.setProperty("vsyncEnabled", "true");
+				defaultProps.setProperty("fpsEnabled", "true");
+				defaultProps.setProperty("windowDecorated", "true");
+
+				// save default properties to properties folder
+				GameAmn.alert("Writing new default properties to "
+						+ savedpropspath);
+				File DPropsFile = new File(savedpropspath.toString());
+				FileOutputStream fileOut = new FileOutputStream(DPropsFile);
+				defaultProps.store(fileOut, "Default Game Properties");
+				fileOut.close();
+				// defaultProps.store(new
+				// FileOutputStream(defaultpath.toString()),
+				// null);
+			}
+
+			// create application properties with default
+			Properties applicationProps = new Properties(defaultProps);
+
+			// now load properties
+			// from last invocation
+			FileInputStream IStream = new FileInputStream(
 					savedpropspath.toString());
-			defaultProps.load(DIStream);
-			// defaultProps.list(System.out);
+			try {
+				applicationProps.load(IStream);
 
-			DIStream.close();
-		} catch (FileNotFoundException e1) {
-			GameAmn.alert("Could not find properties; creating default.");
+				IStream.close();
+			} catch (IOException e) {
+				GameAmn.error(e.getStackTrace());
+			}
 
-			// create folder if it isn't found
-			GameAmn.alert("Creating new folder for Amniora at "
-					+ savedpropspath);
-			File dir = new File(System.getenv("APPDATA") + "\\Amniora");
-			dir.mkdir();
-
-			// if they are not found, set the default properties value
-			defaultProps.setProperty("musicvolume", "0.18f");
-			defaultProps.setProperty("soundvolume", "1f");
-			defaultProps.setProperty("speechvolume", "100");
-			defaultProps.setProperty("shipScale", "0.1f");
-			defaultProps.setProperty("database", "localhost");
-			defaultProps.setProperty("dbuser", "defaultuser");
-
-			defaultProps.setProperty("graphicsquality", "high");
-			defaultProps.setProperty("fontGreatHeader", "Basica v.2012");
-			defaultProps.setProperty("fontNormalHeader", "Freedom");
-			defaultProps.setProperty("fontEntry", "Complex");
-			defaultProps.setProperty("fontText", "Orena");
-
-			defaultProps.setProperty("optionsEnabled", "true");
-			defaultProps.setProperty("vsyncEnabled", "true");
-			defaultProps.setProperty("fpsEnabled", "true");
-			defaultProps.setProperty("windowDecorated", "true");
-
-			// save default properties to properties folder
-			GameAmn.alert("Writing new default properties to " + savedpropspath);
-			File DPropsFile = new File(savedpropspath.toString());
-			FileOutputStream fileOut = new FileOutputStream(DPropsFile);
-			defaultProps.store(fileOut, "Default Game Properties");
-			fileOut.close();
-			// defaultProps.store(new FileOutputStream(defaultpath.toString()),
-			// null);
-		}
-
-		// create application properties with default
-		Properties applicationProps = new Properties(defaultProps);
-
-		// now load properties
-		// from last invocation
-		FileInputStream IStream = new FileInputStream(savedpropspath.toString());
-		try {
-			applicationProps.load(IStream);
-
-			IStream.close();
-		} catch (IOException e) {
+			prop.load(new FileInputStream(savedpropspath.toString()));
+		} catch (Exception e) {
 			GameAmn.error(e.getStackTrace());
 		}
-
-		prop.load(new FileInputStream(savedpropspath.toString()));
 
 	}
 
 	public static String getProperty(String key) {
+		System.out.println("getting property with key: [" + key + "]");
 		return prop.getProperty(key);
 	}
 
@@ -176,16 +183,18 @@ public class PropertiesHandler {
 	public static int getDirection(int direction, int tile) {
 
 		try {
-			System.out.println("Getting | " + "dir." + direction + "." + tile);
 			return Integer
 					.parseInt(getProperty("dir." + direction + "." + tile));
 		} catch (Exception e) {
 			GameAmn.error(e.getStackTrace());
 			GameAmn.alert("Wrong parameter passed to getDirection: "
-					+ direction + " | " + tile);
+					+ direction + " | " + tile + "\n\tException: "
+					+ e.getLocalizedMessage());
+			if (GameAmn.PRINT_EMERGENCY_ERRORS) {
+				e.printStackTrace();
+			}
 			return -1;
 		}
 
 	}
-
 }

@@ -18,6 +18,7 @@ public class GameAmn extends Game {
 	public static final boolean PRINT_STATUS = false;
 	public static final boolean DEBUG_TEXTURES = true;
 	public static final boolean PRINT_ALERTS = true;
+	public static final boolean PRINT_EMERGENCY_ERRORS = true;
 
 	public MainMenuScreen mainMenuScreen;
 	public GameplayScreen gameplayScreen;
@@ -29,14 +30,15 @@ public class GameAmn extends Game {
 	private static int regDirection;
 	private static boolean regActive;
 
- 	public static void runDebug() {
+	public static void runDebug() {
+		PropertiesHandler.init();
 		Variables.init();
+		
+		int value = 50;
 
-
-		PropertiesHandler.saveProperty("dir." + 0 + "." + 50, 30 + "");
-
-		GameAmn.alert("Dir [0] & [50] is: "
-				+ PropertiesHandler.getDirection(0, 50));
+		alert("Dir [0] & [50] is: " + PropertiesHandler.getDirection(0, 50));
+		alert("Dir [0 [40 should be " + value + ": "
+				+ PropertiesHandler.getDirection(0, 40));
 		alert("Debug method finished");
 
 	}
@@ -173,6 +175,17 @@ public class GameAmn extends Game {
 		if (PRINT_ERRORS) {
 
 			System.out.println(trace);
+		}
+
+	}
+
+	/**
+	 * @param stackTrace
+	 */
+	public static void ERROR(StackTraceElement[] stackTrace) {
+		if (PRINT_EMERGENCY_ERRORS) {
+
+			System.out.println(stackTrace);
 		}
 
 	}

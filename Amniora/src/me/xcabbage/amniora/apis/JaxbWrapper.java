@@ -21,7 +21,7 @@ public class JaxbWrapper {
 		try {
 			context = JAXBContext.newInstance(Variables.class);
 
-			// marshall into XML via System.out
+			// marshal into XML via System.out
 			Marshaller marshaller = context.createMarshaller();
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 			marshaller.marshal(var, System.out);

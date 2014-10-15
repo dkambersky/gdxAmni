@@ -24,6 +24,7 @@ public class Variables {
 
 	public static void init() {
 		var = new Variables();
+		tileDirections = new int[4][80];
 		loadDirections();
 	}
 
@@ -53,11 +54,26 @@ public class Variables {
 	public static void loadDirections() {
 		for (int a = 0; a < 4; a++) {
 			for (int b = 0; b < 80; b++) {
-				tileDirections[a][b] = Integer.parseInt(PropertiesHandler
-						.getProperty("dir." + a + "." + b));
+
+				tileDirections[a][b] = PropertiesHandler.getDirection(a, b);
 			}
 		}
 
+	}
+
+	public static void saveDirection(int direction, int tile, int value,
+			boolean modifyInProgram) {
+		if (modifyInProgram) {
+			setDirection(direction, tile, value);
+		}
+		PropertiesHandler.saveProperty("dir." + direction + "." + tile, value
+				+ "");
+	}
+
+	public static void saveDirection(int direction, int tile) {
+
+		PropertiesHandler.saveProperty("dir." + direction + "." + tile,
+				tileDirections[direction][tile] + "");
 	}
 
 	public static int getDirection(int direction, int tile) {
@@ -67,13 +83,13 @@ public class Variables {
 		} catch (Exception e) {
 			GameAmn.error(e.getStackTrace());
 			GameAmn.alert("Wrong parameter passed to getDirection: "
-					+ direction + " | " + tile);
+					+ direction + " | " + tile + "\n\tException: "
+					+ e.getLocalizedMessage());
 			return -1;
 		}
 
 	}
 
-	
 	public static void setDirection(int direction, int tile, int value) {
 
 		try {
@@ -87,7 +103,6 @@ public class Variables {
 
 	}
 
-	
 	/**
 	 * @return the var
 	 */
@@ -97,7 +112,6 @@ public class Variables {
 		return var;
 	}
 
-	
 	/**
 	 * @param var
 	 *            the var to set
