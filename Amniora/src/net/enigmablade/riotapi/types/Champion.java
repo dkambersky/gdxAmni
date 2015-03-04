@@ -1,10 +1,12 @@
 package net.enigmablade.riotapi.types;
 
 import java.util.*;
+
 import net.enigmablade.riotapi.*;
 import net.enigmablade.riotapi.constants.*;
 import net.enigmablade.riotapi.constants.Locale;
 import net.enigmablade.riotapi.constants.staticdata.*;
+import net.enigmablade.riotapi.constants.staticdata.ChampionDataType;
 import net.enigmablade.riotapi.exceptions.*;
 import net.enigmablade.riotapi.types.staticdata.*;
 
