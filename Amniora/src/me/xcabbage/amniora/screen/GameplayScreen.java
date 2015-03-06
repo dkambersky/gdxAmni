@@ -503,7 +503,7 @@ public class GameplayScreen implements Screen {
 				case '\n':
 				case '\r':
 					GameAmn.sendConsole(textField.getText());
-					textField.setText("Enter commands...");
+					textField.setText("");
 					break;
 
 				}

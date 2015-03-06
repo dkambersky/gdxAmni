@@ -90,10 +90,31 @@ public class Variables {
 
 	}
 
+	public static void setDirection(int tile, int value) {
+		setDirection(GameAmn.regDirection, tile, value);
+	}
+
 	public static void setDirection(int direction, int tile, int value) {
+		int secondDirection = -1;
+		switch (direction) {
+		case 0:
+			secondDirection = 1;
+			break;
+		case 1:
+			secondDirection = 0;
+			break;
+		case 2:
+			secondDirection = 3;
+			break;
+		case 3:
+			secondDirection = 2;
+			break;
+
+		}
 
 		try {
 			tileDirections[direction][tile] = value;
+			tileDirections[secondDirection][value] = tile;
 		} catch (Exception e) {
 			GameAmn.error(e.getStackTrace());
 			GameAmn.alert("Wrong parameter passed to setDirection: "

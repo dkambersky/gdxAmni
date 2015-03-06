@@ -31,6 +31,7 @@ public class AmniInputProcessor implements InputProcessor {
 
 	};
 	private Camera cam;
+
 	public AmniInputProcessor(final GameAmn gam) {
 		game = gam;
 
@@ -56,7 +57,6 @@ public class AmniInputProcessor implements InputProcessor {
 				rotating = true;
 				direction = 3;
 				return true;
-
 			case Input.Keys.ESCAPE:
 				game.dispose();
 				Gdx.app.exit();
@@ -64,7 +64,7 @@ public class AmniInputProcessor implements InputProcessor {
 			default:
 				return false;
 
-		}
+			}
 
 		}
 		return true;
@@ -98,7 +98,7 @@ public class AmniInputProcessor implements InputProcessor {
 	}
 
 	@Override
- 	public boolean keyTyped(char character) {
+	public boolean keyTyped(char character) {
 
 		if (!consoleActive) {
 			switch (character) {
@@ -132,7 +132,7 @@ public class AmniInputProcessor implements InputProcessor {
 				break;
 			case ';':
 				consoleActive = !consoleActive;
-System.out.println(consoleActive+": console");
+				System.out.println(consoleActive + ": console");
 				if (stage.getKeyboardFocus() == null) {
 					stage.setKeyboardFocus(console_textfield);
 

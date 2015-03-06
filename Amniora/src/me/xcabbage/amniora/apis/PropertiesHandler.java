@@ -521,4 +521,5 @@ public class PropertiesHandler {
 		defaultProps.setProperty("dir.3.78", "0");
 		defaultProps.setProperty("dir.3.79", "0");
 	}
+
 }

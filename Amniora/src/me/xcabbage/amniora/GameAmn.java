@@ -26,14 +26,13 @@ public class GameAmn extends Game {
 	public AmniInputProcessor standardProcessor;
 	public Json json;
 	public static GameInstance inst;
-	private static int regDirection;
+	public static int regDirection;
 	private static boolean regActive;
 
 	public static void runDebug() {
 		PropertiesHandler.init();
 		Variables.init();
-		
-		
+
 		int value = 50;
 
 		alert("Dir [0] [50] is: " + PropertiesHandler.getDirection(0, 50));
@@ -128,24 +127,47 @@ public class GameAmn extends Game {
 
 		case "reg":
 			regActive = true;
-			if (args[1].equalsIgnoreCase("end")) {
-				regActive = false;
+			if (args.length > 1) {
+				if (args[1].equalsIgnoreCase("end")) {
+					regActive = false;
 
-			} else {
+				} else {
 
-				try {
-					regDirection = Integer.parseInt(args[1]);
-				} catch (NumberFormatException e) {
-					GameAmn.error(e.getStackTrace());
-					GameAmn.alert("Wrong parameter passed to reg command: "
-							+ args[1]);
+					try {
+						regDirection = Integer.parseInt(args[1]);
+					} catch (Exception e) {
+						GameAmn.error(e.getStackTrace());
+						GameAmn.alert("Wrong parameter passed to reg command: "
+								+ args[1]);
+					}
+				}
+				System.out.println("Reg " + regActive + " in direction of "
+						+ regDirection);
+			}
+			break;
+		case "syso":
+			for (int a = 0; a < 4; a++) {
+				for (int b = 0; b < 80; b++) {
+					System.out.printf("side %d: tile %d --> %d \n", a, b,
+							Variables.getDirection(a, b));
 				}
 			}
-			System.out.println("Reg " + regActive + " in direction of "
-					+ regDirection);
 			break;
 
+		default:
+			if (regActive) {
+				try {
+					System.out.println("Registering.");
+					Variables.setDirection(Integer.parseInt(args[0]),
+							Integer.parseInt(args[1]));
+					Variables.flushDirections();
+				} catch (Exception e) {
+					System.out.println("Exception occured in registering.");
+				}
+			}
+
 		}
+
 	}
 
 	// ERRORS & ALERTS
