@@ -10,20 +10,13 @@ package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.assets.Assets;
-import me.xcabbage.amniora.input.AmniInputProcessor;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Shader;
 
 /**
@@ -38,14 +31,11 @@ public class MainMenuScreen implements Screen {
 
 	private OrthographicCamera camera;
 	private SpriteBatch batch;
-	private Texture texture;
 	private Sprite S_background, S_planet;
-	private TextureRegion R_background, R_planet;
 	BitmapFont F_debug, F_buttons, F_buttonsHighlight, F_buttonsOutline0,
 			F_buttonsOutline1, F_buttonsOutline2, F_buttonsOutline3;
 	public Shader shader;
 	GameAmn game;
-	private boolean fontHighlight;
 	public float[] buttonHighlight = { 0f, 0f, 0f, 0f };
 
 	public MainMenuScreen(final GameAmn gam) {
@@ -75,9 +65,6 @@ public class MainMenuScreen implements Screen {
 		F_buttonsOutline3 = Assets.F_buttonsOutline3;
 
 		// load textures, spritesheets, sprites
-
-		R_background = Assets.R_background;
-		R_planet = Assets.R_planet;
 
 		S_background = Assets.S_background;
 		S_planet = Assets.S_planet;

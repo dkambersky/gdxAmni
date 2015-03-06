@@ -9,12 +9,8 @@
 package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
-import me.xcabbage.amniora.input.AmniInputProcessor;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -45,7 +41,6 @@ public class OptionsScreen implements Screen {
 			F_buttonsOutline1, F_buttonsOutline2, F_buttonsOutline3;
 	public Shader shader;
 	GameAmn game;
-	private boolean fontHighlight;
 	public float[] buttonHighlight = { 0f, 0f, 0f, 0f };
 
 	public OptionsScreen(final GameAmn gam) {

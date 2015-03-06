@@ -1,5 +1,6 @@
 package me.xcabbage.amniora.screen;
 
+
 import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.GameInstance;
 import me.xcabbage.amniora.assets.Assets;
@@ -7,9 +8,7 @@ import me.xcabbage.amniora.input.AmniInputProcessor;
 import me.xcabbage.amniora.util.Geometry;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
@@ -20,15 +19,12 @@ import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.VertexAttribute;
-import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.Environment;
 import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
@@ -37,20 +33,14 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.attributes.TextureAttribute;
 import com.badlogic.gdx.graphics.g3d.environment.DirectionalLight;
-import com.badlogic.gdx.graphics.g3d.model.data.ModelMesh;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldListener;
@@ -62,7 +52,6 @@ public class GameplayScreen implements Screen {
 	// // / Constants - to be tweaked when needed
 	private static final int VECTOR_COUNT = 100;
 	private static float SQUARE_SIDE = 100;
-	private static final float ORBIT_SCALE = 4;
 	private static final int VECTORS_SQRT = 10;
 	private static final float SPHERE_SCALE = 0.6f;
 	private static final boolean GRADUAL_COLORING = true;
@@ -74,7 +63,6 @@ public class GameplayScreen implements Screen {
 	public GameAmn game;
 	public GameInstance instance;
 	public boolean loading;
-	private boolean consoleShown;
 	public int width, height;
 	Stage stage;
 
@@ -123,8 +111,6 @@ public class GameplayScreen implements Screen {
 	TextField console_textfield;
 	String[] console_history = new String[6];
 	private TextFieldStyle console_textfield_style;
-	private InputProcessor console_processor;
-
 	// // /DEBUG!
 	Pixmap tempMap;
 	public static Texture[] tileTextures;
@@ -382,7 +368,6 @@ public class GameplayScreen implements Screen {
 		 * null); builder.index(index); }
 		 */
 		Geometry ico = new Geometry();
-		Vector3 v, tempV;
 		ModelBuilder mb = new ModelBuilder();
 		mb.begin();
 
@@ -453,7 +438,6 @@ public class GameplayScreen implements Screen {
 						System.out.println(a + "....");
 						System.out.println("orig: " + col);
 					}
-					float rNew = (float) a / 80;
 					if (GameAmn.PRINT_STATUS) {
 						System.out.println(a + " / 80");
 						System.out.println((float) a / 80 + " | " + (float) a
@@ -660,7 +644,6 @@ public class GameplayScreen implements Screen {
 		// -1 to 1
 		// as expressed in cylindrical co-ordinates
 		float x = xzVector.x, y = xzVector.y;
-		float phi = (float) (y * 2 * Math.PI);
 		float z = 2 * x - 1;
 		float rho = 1;
 		// Project that radially along z-axis to be on sphere

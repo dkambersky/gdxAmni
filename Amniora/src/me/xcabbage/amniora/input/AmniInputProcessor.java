@@ -8,10 +8,8 @@ import me.xcabbage.amniora.screen.MainMenuScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g3d.utils.CameraInputController;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -33,8 +31,6 @@ public class AmniInputProcessor implements InputProcessor {
 
 	};
 	private Camera cam;
-	private CameraInputController camController;
-
 	public AmniInputProcessor(final GameAmn gam) {
 		game = gam;
 
@@ -76,7 +72,6 @@ public class AmniInputProcessor implements InputProcessor {
 
 	public void setCamera(Camera cam, CameraInputController controller) {
 		this.cam = cam;
-		this.camController = controller;
 	}
 
 	@Override
