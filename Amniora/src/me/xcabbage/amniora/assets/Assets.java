@@ -34,7 +34,8 @@ public class Assets {
 
 	public static void init() {
 		// Loading Fonts
-		F_debug = new BitmapFont();
+		F_debug = new BitmapFont(Gdx.files.internal("fonts/trebuchet.fnt"),
+				Gdx.files.internal("fonts/trebuchet.png"), false);
 		F_buttons = new BitmapFont(
 				Gdx.files.internal("fonts/starcraftPlain.fnt"),
 				Gdx.files.internal("fonts/starcraftPlain.png"), false);
@@ -62,7 +63,7 @@ public class Assets {
 		R_background = new TextureRegion(texture, 0, 0, 2016, 1345);
 		R_planet = new TextureRegion(texture, 0, 1365, 950, 686);
 
-		// Sprites 
+		// Sprites
 		S_background = new Sprite(R_background);
 		S_background.setScale(0.52f);
 		S_background.setOrigin(0, 0);

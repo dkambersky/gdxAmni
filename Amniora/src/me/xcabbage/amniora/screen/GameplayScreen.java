@@ -1,6 +1,5 @@
 package me.xcabbage.amniora.screen;
 
-
 import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.GameInstance;
 import me.xcabbage.amniora.assets.Assets;
@@ -471,10 +470,16 @@ public class GameplayScreen implements Screen {
 		spriteBatch = new SpriteBatch();
 		console_texture = new Texture(Gdx.files.internal("data/console.png"));
 		console_sprite = new Sprite(console_texture);
+
+		float console_scale = 0.65f;
+		console_sprite.setScale(console_scale);
 		console_sprite.setBounds(
-				Gdx.graphics.getWidth() - console_sprite.getWidth(),
-				Gdx.graphics.getHeight() - console_sprite.getHeight(),
-				console_sprite.getWidth(), console_sprite.getHeight());
+				Gdx.graphics.getWidth()
+						- (console_sprite.getWidth() * console_scale),
+				Gdx.graphics.getHeight()
+						- (console_sprite.getHeight() * console_scale),
+				(console_scale * console_sprite.getWidth()),
+				(console_scale * console_sprite.getHeight()));
 
 		console_textfield_style = new TextFieldStyle();
 		F_debug.scale(0.3f);
