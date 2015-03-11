@@ -133,7 +133,7 @@ public class AmniInputProcessor implements InputProcessor {
 			case ';':
 				consoleActive = !consoleActive;
 				System.out.println(consoleActive + ": console");
-				if (stage.getKeyboardFocus() == null) {
+				if (stage != null && stage.getKeyboardFocus() == null) {
 					stage.setKeyboardFocus(console_textfield);
 
 				} else {

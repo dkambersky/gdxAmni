@@ -25,8 +25,7 @@ import me.xcabbage.amniora.GameAmn;
 public class PropertiesHandler {
 
 	static Path savedpropspath = Paths.get(System.getenv("APPDATA")
-			+ "\\Amniora\\game.properties"); // path to saved non-default
-												// props
+			+ "\\Amniora\\game.properties"); // path to saved non-default props
 	static Properties prop = new Properties();
 
 	public static void init() {

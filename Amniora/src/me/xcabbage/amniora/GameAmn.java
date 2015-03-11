@@ -93,8 +93,8 @@ public class GameAmn extends Game {
 	/**
 	 * @param text
 	 */
-	public static void sendConsole(String text) {
-
+	public static void sendConsole(String text) { 
+		storeConsole(text);
 		// Chop up the args
 		String[] args = text.split(" ");
 
@@ -104,7 +104,7 @@ public class GameAmn extends Game {
 		case "ping":
 			if (args.length == 1) {
 				// Bukkit's console easter egg tribute
-				System.out.println("Pong. I hear Thrax likes cute asian boys.");
+				storeConsole("Pong. I hear Thrax likes cute asian boys.");
 			} else {
 				int pingArgs = 0;
 				try {
@@ -114,14 +114,14 @@ public class GameAmn extends Game {
 							.println("Wrong parameter passed to ping command");
 				} finally {
 					for (int a = 0; a < pingArgs; a++) {
-						System.out.println("Pong!");
+						storeConsole("Pong!");
 					}
 				}
 			}
 			break;
 		// / Kill the app
 		case "kill":
-			System.out.println("Killing myself");
+			storeConsole("Killing myself");
 			Gdx.app.exit();
 			break;
 
@@ -141,7 +141,7 @@ public class GameAmn extends Game {
 								+ args[1]);
 					}
 				}
-				System.out.println("Reg " + regActive + " in direction of "
+				storeConsole("Reg " + regActive + " in direction of "
 						+ regDirection);
 			}
 			break;
@@ -157,17 +157,30 @@ public class GameAmn extends Game {
 		default:
 			if (regActive) {
 				try {
-					System.out.println("Registering.");
+					storeConsole("Registering.");
 					Variables.setDirection(Integer.parseInt(args[0]),
 							Integer.parseInt(args[1]));
 					Variables.flushDirections();
 				} catch (Exception e) {
-					System.out.println("Exception occured in registering.");
+					storeConsole("Exception occured in registering.");
 				}
+			} else {
+				storeConsole("Unknown command. Try again =)");
 			}
+			
 
 		}
 
+	}
+
+	public static void storeConsole(String text) {
+		String[] history = GameplayScreen.console_history;
+		for (int a = history.length - 1; a > 0; a--) {
+
+			history[a] = history[a - 1] + "";
+
+		}
+		history[0] = text;
 	}
 
 	// ERRORS & ALERTS
