@@ -90,14 +90,15 @@ public class GameplayScreen implements Screen {
 	// / Batch
 	private SpriteBatch spriteBatch;
 	// / Fonts
-	BitmapFont F_debug, F_buttons, F_buttonsHighlight, F_buttonsOutline0,
-			F_buttonsOutline1, F_buttonsOutline2, F_buttonsOutline3;
+	BitmapFont F_debug, F_history, F_history2, F_buttons, F_buttonsHighlight,
+			F_buttonsOutline0, F_buttonsOutline1, F_buttonsOutline2,
+			F_buttonsOutline3;
 
 	// / Console
 	Sprite console_sprite;
 	Texture console_texture;
 	TextField console_textfield;
-	String[] console_history = new String[6];
+	public static String[] console_history = new String[12];
 	private TextFieldStyle console_textfield_style;
 	// // /DEBUG!
 	Pixmap tempMap;
@@ -112,6 +113,14 @@ public class GameplayScreen implements Screen {
 		// fonts
 
 		F_debug = Assets.F_debug;
+		F_history = new BitmapFont(Gdx.files.internal("fonts/trebuchet.fnt"),
+				Gdx.files.internal("fonts/trebuchet.png"), false);
+		F_history.setScale(0.5f);
+		F_history.setColor(Color.CYAN);
+		F_history2 = new BitmapFont(Gdx.files.internal("fonts/trebuchet.fnt"),
+				Gdx.files.internal("fonts/trebuchet.png"), false);
+		F_history2.setScale(0.5f);
+		F_history2.setColor(Color.ORANGE);
 		F_buttons = Assets.F_buttons;
 		F_buttonsHighlight = Assets.F_buttonsHighlight;
 		F_buttonsOutline0 = Assets.F_buttonsOutline0;
@@ -258,8 +267,6 @@ public class GameplayScreen implements Screen {
 						System.out.println((float) a / 80 + " | " + (float) a
 								/ 80 + " | " + (float) a / 80 + " | " + 1f);
 					}
-					// col.set((float) a /80, (float) a / 80, (float) a / 80,
-					// 1f);
 					col.set(0, 0, (float) a / 80, 1f);
 					if (GameAmn.PRINT_STATUS) {
 						System.out.println("new: " + col);
@@ -282,6 +289,9 @@ public class GameplayScreen implements Screen {
 	// // LOADING - DEBUG
 	// / console
 	void createConsole() {
+		for (int a = 0; a < console_history.length; a++) {
+			console_history[a] = "<blank>";
+		}
 		stage = new Stage();
 		spriteBatch = new SpriteBatch();
 		console_texture = new Texture(Gdx.files.internal("data/console.png"));
@@ -318,7 +328,7 @@ public class GameplayScreen implements Screen {
 				case '\\':
 					stage.setKeyboardFocus(null);
 					AmniInputProcessor.consoleActive = false;
-					textField.setText("");
+					textField.setText("Enter commands...");
 				case '\n':
 				case '\r':
 					GameAmn.sendConsole(textField.getText());
@@ -382,12 +392,30 @@ public class GameplayScreen implements Screen {
 		modelBatch.end();
 
 		// 2D Render
+
+		// Console
 		if (CONSOLE_ENABLED && !loading) {
 			try {
 				spriteBatch.begin();
 				console_sprite.draw(spriteBatch);
 				F_debug.draw(spriteBatch, "X: " + Gdx.input.getX() + ", Y: "
 						+ (Gdx.input.getY()) + ".", 5, 20);
+
+				// history
+				int a = 0, step = 15;
+
+				for (String entry : console_history) {
+					if (a % 2 == 1) {
+						F_history.draw(spriteBatch, entry,
+								console_sprite.getX() + 10,
+								console_sprite.getY() + 60 + (step * a));
+					} else {
+						F_history2.draw(spriteBatch, ">  " + entry,
+								console_sprite.getX() + 30,
+								console_sprite.getY() + 60 + (step * a));
+					}
+					a++;
+				}
 
 				spriteBatch.end();
 				stage.act();
