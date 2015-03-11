@@ -408,11 +408,11 @@ public class GameplayScreen implements Screen {
 					if (a % 2 == 1) {
 						F_history.draw(spriteBatch, entry,
 								console_sprite.getX() + 10,
-								console_sprite.getY() + 60 + (step * a));
+								console_sprite.getY() + 50 + (step * a));
 					} else {
 						F_history2.draw(spriteBatch, ">  " + entry,
 								console_sprite.getX() + 30,
-								console_sprite.getY() + 60 + (step * a));
+								console_sprite.getY() + 50 + (step * a));
 					}
 					a++;
 				}

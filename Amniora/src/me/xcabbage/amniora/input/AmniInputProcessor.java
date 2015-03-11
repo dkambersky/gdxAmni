@@ -158,14 +158,10 @@ public class AmniInputProcessor implements InputProcessor {
 			game.mainMenuScreen.dispose();
 
 			break;
-
 		case 1:
-			System.out.println("Opening stats: League for once.");
-			System.out.println("Level: " + game.json.getLevel());
-			System.out.println("Raw data below. ");
-			game.json.dump();
-
+			System.out.println("Stats screen not yet properly implemented");
 			break;
+
 		case 2:
 			System.out.println("Initializing Play");
 			break;

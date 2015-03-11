@@ -1,7 +1,5 @@
 package me.xcabbage.amniora;
 
-import net.enigmablade.riotapi.constants.Region;
-import me.xcabbage.amniora.apis.Json;
 import me.xcabbage.amniora.apis.PropertiesHandler;
 import me.xcabbage.amniora.apis.Variables;
 import me.xcabbage.amniora.input.AmniInputProcessor;
@@ -24,7 +22,7 @@ public class GameAmn extends Game {
 	public InputMultiplexer multiplexer;
 	public int currentScreen = -1;
 	public AmniInputProcessor standardProcessor;
-	public Json json;
+
 	public static GameInstance inst;
 	public static int regDirection;
 	private static boolean regActive;
@@ -46,10 +44,6 @@ public class GameAmn extends Game {
 	public void create() {
 		// Run whatever code is needed for debugging atm
 		runDebug();
-		// Riot API
-
-		json = new Json();
-		json.setSummoner("Davefin", Region.EUNE);
 
 		// Input processing
 		standardProcessor = new AmniInputProcessor(this);
@@ -93,7 +87,7 @@ public class GameAmn extends Game {
 	/**
 	 * @param text
 	 */
-	public static void sendConsole(String text) { 
+	public static void sendConsole(String text) {
 		storeConsole(text);
 		// Chop up the args
 		String[] args = text.split(" ");
@@ -167,7 +161,6 @@ public class GameAmn extends Game {
 			} else {
 				storeConsole("Unknown command. Try again =)");
 			}
-			
 
 		}
 
