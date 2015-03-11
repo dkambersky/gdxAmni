@@ -67,7 +67,6 @@ public class GameplayScreen implements Screen {
 
 	// // / Graphical framework
 	private PerspectiveCamera camera;
-
 	private Environment environment;
 	private ShapeRenderer shapeRenderer;
 	public CameraInputController camController;
@@ -483,8 +482,8 @@ public class GameplayScreen implements Screen {
 
 		console_textfield_style = new TextFieldStyle();
 		F_debug.scale(0.3f);
-		console_textfield_style.font = F_debug;
-		console_textfield_style.fontColor = Color.GREEN;
+		console_textfield_style.font = F_buttonsHighlight;
+		console_textfield_style.fontColor = Color.WHITE;
 		console_textfield = new TextField("Enter commands...",
 				console_textfield_style);
 
