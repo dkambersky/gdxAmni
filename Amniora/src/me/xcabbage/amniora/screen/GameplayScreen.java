@@ -2,9 +2,9 @@ package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
 import me.xcabbage.amniora.GameInstance;
-import me.xcabbage.amniora.assets.Assets;
 import me.xcabbage.amniora.input.AmniInputProcessor;
-import me.xcabbage.amniora.util.Geometry;
+import me.xcabbage.amniora.util.Assets;
+import me.xcabbage.amniora.util.Icosahedron;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
@@ -191,7 +191,7 @@ public class GameplayScreen implements Screen {
 		instance = new GameInstance(this);
 		instance.initBattlefield();
 
-		Geometry ico = new Geometry();
+		Icosahedron ico = new Icosahedron();
 		ModelBuilder mb = new ModelBuilder();
 		mb.begin();
 

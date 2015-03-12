@@ -9,7 +9,8 @@
 package me.xcabbage.amniora.screen;
 
 import me.xcabbage.amniora.GameAmn;
-import me.xcabbage.amniora.assets.Assets;
+import me.xcabbage.amniora.util.Assets;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL10;

@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Icosahedron {
 
+	public float[] vertices;
 	/**
 	 * Indices of this IndexedMesh
 	 */
@@ -58,6 +59,11 @@ public class Icosahedron {
 		vertexNormalsArray = floatListToFloatArray(vertexNormalsList);
 		indices = integerListToIntegerArray(indicesList);
 		vertexCount = vertexList.size() / 3;
+
+		vertices = this.verticesArray;
+		for (int a = 0; a < vertices.length; a = a + 3)
+			System.out.println(vertices[a] + ", " + vertices[a + 1] + ", "
+					+ vertices[a + 2]);
 	}
 
 	private void norm(float v[]) {
