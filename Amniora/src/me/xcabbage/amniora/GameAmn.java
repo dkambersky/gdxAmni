@@ -42,6 +42,7 @@ public class GameAmn extends Game {
 
 	@Override
 	public void create() {
+
 		// Run whatever code is needed for debugging atm
 		runDebug();
 
@@ -139,13 +140,16 @@ public class GameAmn extends Game {
 						+ regDirection);
 			}
 			break;
-		case "syso":
+		case "sides":
 			for (int a = 0; a < 4; a++) {
 				for (int b = 0; b < 80; b++) {
 					System.out.printf("side %d: tile %d --> %d \n", a, b,
 							Variables.getDirection(a, b));
 				}
 			}
+			break;
+		case "paint-textures":
+			inst.recolourInProgress = !inst.recolourInProgress;
 			break;
 
 		default:
@@ -203,17 +207,6 @@ public class GameAmn extends Game {
 		if (PRINT_ERRORS) {
 
 			System.out.println(trace);
-		}
-
-	}
-
-	/**
-	 * @param stackTrace
-	 */
-	public static void ERROR(StackTraceElement[] stackTrace) {
-		if (PRINT_EMERGENCY_ERRORS) {
-
-			System.out.println(stackTrace);
 		}
 
 	}

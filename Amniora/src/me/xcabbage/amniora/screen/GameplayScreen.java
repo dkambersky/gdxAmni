@@ -44,7 +44,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameplayScreen implements Screen {
 
-	private static final boolean GRADUAL_COLORING = true;
+	private static final boolean GRADUAL_COLORING = false;
 	private static final boolean CONSOLE_ENABLED = true;
 
 	// // / Screen logic
@@ -54,7 +54,6 @@ public class GameplayScreen implements Screen {
 	public GameInstance instance;
 	public boolean loading;
 	public int width, height;
-	Stage stage;
 
 	// // / Graphical framework
 	private PerspectiveCamera camera;
@@ -72,19 +71,8 @@ public class GameplayScreen implements Screen {
 	public Array<ModelInstance> instances = new Array<ModelInstance>();
 	private Texture texture;
 	private ModelBatch modelBatch;
-	public Mesh mesh;
-	public ModelInstance moving;
 	public static Texture tile_texture_1;
-	Pixmap globeMap;
-
-	Mesh globeMesh;
-	Model globeModel;
 	public ModelInstance globeInstance;
-
-	Color[] col1 = new Color[6];
-	public Vector2[] xzVect;
-	public Vector3[] sphereVect;
-	public Color[] pointColor;
 
 	// // 2D Render
 	// / Batch
@@ -100,6 +88,7 @@ public class GameplayScreen implements Screen {
 	TextField console_textfield;
 	public static String[] console_history = new String[12];
 	private TextFieldStyle console_textfield_style;
+	Stage stage;
 	// // /DEBUG!
 	Pixmap tempMap;
 	public static Texture[] tileTextures;
@@ -111,7 +100,6 @@ public class GameplayScreen implements Screen {
 		game = gam;
 
 		// fonts
-
 		F_debug = Assets.F_debug;
 		F_history = new BitmapFont(Gdx.files.internal("fonts/trebuchet.fnt"),
 				Gdx.files.internal("fonts/trebuchet.png"), false);
@@ -191,6 +179,7 @@ public class GameplayScreen implements Screen {
 		instance = new GameInstance(this);
 		instance.initBattlefield();
 
+		// Globe mesh
 		Icosahedron ico = new Icosahedron();
 		ModelBuilder mb = new ModelBuilder();
 		mb.begin();
@@ -219,8 +208,7 @@ public class GameplayScreen implements Screen {
 			final short index3 = builder.vertex(v3, null, null, new Vector2(1,
 					0));
 			builder.index(index1, index2, index3);
-			System.out.println(builder.getAttributes().size() + " | "
-					+ builder.getAttributes());
+
 		}
 
 		Model model = mb.end();
@@ -258,26 +246,14 @@ public class GameplayScreen implements Screen {
 					}
 				} else {
 					col = Color.ORANGE.cpy();
-					if (GameAmn.PRINT_STATUS) {
-						System.out.println(a + "....");
-						System.out.println("orig: " + col);
-					}
-					if (GameAmn.PRINT_STATUS) {
-						System.out.println(a + " / 80");
-						System.out.println((float) a / 80 + " | " + (float) a
-								/ 80 + " | " + (float) a / 80 + " | " + 1f);
-					}
 					col.set(0, 0, (float) a / 80, 1f);
-					if (GameAmn.PRINT_STATUS) {
-						System.out.println("new: " + col);
-					}
+
 				}
 				mate.set(ColorAttribute.createDiffuse(col));
-				if (GameAmn.PRINT_STATUS) {
-					System.out.println("Assigning " + a);
-				}
+
 			} catch (Exception e) {
-				System.out.println("Can't assign color to mat number " + a);
+				System.out.println("Can't assign color to mat number " + a
+						+ ": " + e.getLocalizedMessage());
 			}
 
 		}
@@ -353,9 +329,11 @@ public class GameplayScreen implements Screen {
 
 	// ----- GAME LOOPS-----
 
-	// updates
+	/**
+	 * Update
+	 */
 	public void updateGame() {
-		// orbitEverything();
+
 		try {
 			instance.updateBattlefield();
 
@@ -365,7 +343,9 @@ public class GameplayScreen implements Screen {
 
 	}
 
-	// render
+	/**
+	 * Render method
+	 */
 	@Override
 	public void render(float delta) {
 
@@ -422,6 +402,7 @@ public class GameplayScreen implements Screen {
 				stage.draw();
 
 			} catch (Exception e) {
+				GameAmn.error(e.getStackTrace());
 
 			}
 
@@ -443,11 +424,6 @@ public class GameplayScreen implements Screen {
 			source.drawPixmap(fontPixmap, x + (a * spacing), y, tempGlyph.srcX,
 					tempGlyph.srcY, tempGlyph.width, tempGlyph.height);
 		}
-
-		if (GameAmn.PRINT_STATUS) {
-			System.out.println("Drawing, lol");
-		}
-		// Gdx.files.internal(data.getImagePath(tempGlyph.id))
 
 	}
 

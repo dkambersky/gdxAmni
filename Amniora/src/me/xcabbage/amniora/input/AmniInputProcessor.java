@@ -26,10 +26,7 @@ public class AmniInputProcessor implements InputProcessor {
 
 	public int direction;
 	int buttonPixels[][] = { { 116, 290, 236, 320, }, { 160, 370, 302, 408, },
-
-	{ 236, 448, 436, 482, }, { 370, 518, 468, 556 }
-
-	};
+			{ 236, 448, 436, 482, }, { 370, 518, 468, 556 } };
 	private Camera cam;
 
 	public AmniInputProcessor(final GameAmn gam) {
@@ -119,26 +116,14 @@ public class AmniInputProcessor implements InputProcessor {
 					;
 				}
 				break;
-			case 'g':
-				try {
-					GameInstance instance = ((GameplayScreen) game.getScreen()).instance;
-					instance.recolourInProgress = !instance.recolourInProgress;
 
-				} catch (Exception e) {
-					GameAmn.error(e.getLocalizedMessage());
-					GameAmn.error(e.getStackTrace());
-				}
-
-				break;
 			case ';':
 				consoleActive = !consoleActive;
-				System.out.println(consoleActive + ": console");
 				if (stage != null && stage.getKeyboardFocus() == null) {
 					stage.setKeyboardFocus(console_textfield);
 
 				} else {
 					stage.setKeyboardFocus(null);
-
 					console_textfield.setText("Enter commands...");
 				}
 				break;
