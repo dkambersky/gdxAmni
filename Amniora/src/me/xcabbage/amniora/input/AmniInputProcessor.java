@@ -76,14 +76,8 @@ public class AmniInputProcessor implements InputProcessor {
 		if (!consoleActive) {
 			switch (keycode) {
 			case Input.Keys.O:
-				rotating = false;
-				return true;
 			case Input.Keys.P:
-				rotating = false;
-				return true;
 			case Input.Keys.K:
-				rotating = false;
-				return true;
 			case Input.Keys.L:
 				rotating = false;
 				return true;
