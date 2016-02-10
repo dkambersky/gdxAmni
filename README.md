@@ -5,7 +5,7 @@ A repo for the Amniora Game project.
 ----------
 This is more of a solo project, for a programming class I'm currently taking under the CAS programme.
 
-Initally created by xCabbage 	[https://github.com/xcabbage].
+Initally created by dkambersky 	[https://github.com/dkambersky].
 
 Concept:
 ----------
